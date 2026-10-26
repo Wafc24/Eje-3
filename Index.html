@@ -1,0 +1,3242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analítica Técnica de Simulacros Saber y Planes de Choque | Grupo Edúcate Colombia</title>
+  <meta name="description" content="Ecosistema técnico y pedagógico de Simulacros Saber para Básica Secundaria y Media (9°, 10° y 11°). Diseño centrado en evidencias, análisis de sesgos, desestructuración de ítems y planes de choque.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       VARIABLES Y PALETA DE COLORES - GRUPO EDÚCATE COLOMBIA
+       ========================================================================== */
+    :root {
+      --ink: #0d1528;
+      --ink-deep: #070c17;
+      --ink-surface: #111c34;
+      --blue: #0d39f8;
+      --blue-hover: #092bd0;
+      --blue-subtle: #edf2fe;
+      --cyan: #13a2f2;
+      --cyan-light: #e0f2fe;
+      --cyan-glow: rgba(19, 162, 242, 0.28);
+      --indigo: #4f46e5;
+      --indigo-subtle: #eef2ff;
+      --emerald: #10b981;
+      --emerald-subtle: #ecfdf5;
+      --amber: #f59e0b;
+      --amber-subtle: #fffbeb;
+      --rose: #f43f5e;
+      --rose-subtle: #fff1f2;
+      --purple: #8b5cf6;
+      --purple-subtle: #f5f3ff;
+      --muted: #5c6b84;
+      --muted-light: #94a3b8;
+      --paper: #f4f7fc;
+      --card-bg: #ffffff;
+      --line: #e2e8f0;
+      --line-subtle: #edf2f9;
+      --shadow-sm: 0 2px 8px rgba(13, 21, 40, 0.05);
+      --shadow-md: 0 10px 30px rgba(13, 21, 40, 0.08);
+      --shadow-lg: 0 20px 48px rgba(13, 21, 40, 0.14);
+      --shadow-glow: 0 0 25px rgba(19, 162, 242, 0.25);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-pill: 9999px;
+      --transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* TOP BAR NAVEGACIÓN Y CONTROLES DE MODO */
+    .top-control-bar {
+      background: var(--ink-deep);
+      color: #ffffff;
+      border-bottom: 2px solid rgba(19, 162, 242, 0.4);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .top-control-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 12px max(3vw, 24px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-mini {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-pill {
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: 0 2px 10px var(--cyan-glow);
+    }
+
+    .brand-title-mini {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title-mini span {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+
+    .view-mode-toggles {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .mode-btn {
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: var(--transition);
+    }
+
+    .mode-btn:hover {
+      color: #ffffff;
+    }
+
+    .mode-btn.active {
+      background: var(--cyan);
+      color: var(--ink-deep);
+      box-shadow: 0 2px 10px rgba(19, 162, 242, 0.4);
+    }
+
+    .presentation-nav {
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .presentation-nav.show {
+      display: flex;
+    }
+
+    .pres-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      transition: var(--transition);
+    }
+
+    .pres-btn:hover {
+      background: var(--blue);
+      transform: scale(1.05);
+    }
+
+    .pres-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--cyan);
+      background: rgba(0,0,0,0.3);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* BARRA DE PESTAÑAS HORIZONTALES (DASHBOARD) */
+    .module-nav-bar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 61px;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .module-nav-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 max(3vw, 24px);
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .module-nav-container::-webkit-scrollbar { display: none; }
+
+    .module-tab-btn {
+      padding: 14px 18px;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .module-tab-btn:hover {
+      color: var(--blue);
+      background: var(--paper);
+    }
+
+    .module-tab-btn.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+      background: rgba(13, 57, 248, 0.03);
+    }
+
+    .module-tab-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .module-tab-btn.active .module-tab-badge {
+      background: var(--blue-subtle);
+      color: var(--blue);
+    }
+
+    /* CONTENEDOR PRINCIPAL Y SECCIONES */
+    .main-wrapper {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 30px max(3vw, 24px) 80px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .content-section {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      padding: 32px;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      scroll-margin-top: 130px;
+    }
+
+    .content-section:hover {
+      box-shadow: var(--shadow-md);
+      border-color: rgba(19, 162, 242, 0.3);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line-subtle);
+      padding-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .section-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .section-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px var(--cyan-glow);
+    }
+
+    .section-header h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+
+    .section-header p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .section-tag {
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--paper);
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    /* ==========================================================================
+       MÓDULO 1: RUTA PROGRESIVA CON PORTADAS VISUALES
+       ========================================================================== */
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 22px;
+    }
+
+    .route-card {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--line);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .route-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+    }
+
+    .route-card.step-1::before { background: linear-gradient(90deg, #10b981, #34d399); }
+    .route-card.step-2::before { background: linear-gradient(90deg, #13a2f2, #38bdf8); }
+    .route-card.step-3::before { background: linear-gradient(90deg, #0d39f8, #6366f1); }
+    .route-card.step-4::before { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
+
+    .route-step-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      width: fit-content;
+    }
+
+    .step-1 .route-step-badge { background: var(--emerald-subtle); color: #047857; }
+    .step-2 .route-step-badge { background: var(--cyan-light); color: #0369a1; }
+    .step-3 .route-step-badge { background: var(--blue-subtle); color: var(--blue); }
+    .step-4 .route-step-badge { background: var(--purple-subtle); color: #6d28d9; }
+
+    .route-card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    /* Galería de Portadas de Libros en Cada Fase */
+    .route-books-gallery {
+      display: flex;
+      align-items: stretch;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 4px 0;
+    }
+
+    .book-cover-item {
+      flex: 1 1 95px;
+      max-width: 120px;
+      background: var(--paper);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .book-cover-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 18px rgba(13, 21, 40, 0.12);
+      border-color: var(--blue);
+    }
+
+    .book-cover-img-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1.35;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #0d1528;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .book-cover-item:hover .book-cover-img {
+      transform: scale(1.05);
+    }
+
+    .book-cover-title {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .book-cover-grade {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--muted);
+      background: #ffffff;
+      padding: 1px 6px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+    }
+
+    .route-desc-box {
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .route-sales-pitch {
+      background: var(--paper);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 0.8rem;
+      color: var(--ink);
+      border-left: 3px solid var(--blue);
+    }
+
+    /* ==========================================================================
+       MÓDULO 2: DESGLOSE ICFES TABLAS
+       ========================================================================== */
+    .icfes-table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+    }
+
+    .icfes-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+
+    .icfes-table th, .icfes-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .icfes-table th {
+      background: #f8fafc;
+      font-weight: 800;
+      color: var(--ink);
+      text-transform: uppercase;
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+    }
+
+    .icfes-table tr:hover td {
+      background: rgba(19, 162, 242, 0.03);
+    }
+
+    .badge-session {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: var(--blue-subtle);
+      color: var(--blue);
+      border: 1px solid rgba(13, 57, 248, 0.2);
+    }
+
+    /* ==========================================================================
+       MÓDULO 3: MATRIZ DE COMPETENCIAS Y SELECTOR DE DIFICULTAD
+       ========================================================================== */
+    .diff-filter-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--paper);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      flex-wrap: wrap;
+    }
+
+    .diff-select-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .diff-select-label {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .diff-dropdown {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--blue);
+      background: #ffffff;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--ink);
+      cursor: pointer;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(13, 57, 248, 0.1);
+    }
+
+    .diff-dropdown:focus {
+      box-shadow: 0 0 0 3px rgba(13, 57, 248, 0.2);
+    }
+
+    .area-selector-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .area-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--line);
+      background: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .area-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .area-btn.active {
+      background: var(--blue);
+      color: #ffffff;
+      border-color: var(--blue);
+      box-shadow: 0 3px 12px rgba(13, 57, 248, 0.3);
+    }
+
+    .matrix-display-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    @media (max-width: 900px) {
+      .matrix-display-card { grid-template-columns: 1fr; }
+    }
+
+    .matrix-col h4 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .prog-item {
+      margin-bottom: 14px;
+    }
+
+    .prog-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .prog-bar-bg {
+      height: 9px;
+      border-radius: var(--radius-pill);
+      background: var(--paper);
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .prog-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      transition: width 0.4s ease;
+    }
+
+    /* ==========================================================================
+       MÓDULO 4: VISOR RAYOS X (DCE, DEFINICIONES Y CONECTORES)
+       ========================================================================== */
+    .xray-container {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .xray-toolbar {
+      background: #f8fafc;
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .grade-selector-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grade-chip-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+      background: var(--paper);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .grade-chip-btn.active {
+      background: var(--ink);
+      color: #ffffff;
+      border-color: var(--ink);
+    }
+
+    .layer-toggles-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .layer-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+      background: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .layer-btn.active {
+      background: var(--blue);
+      color: #ffffff;
+      border-color: var(--blue);
+      box-shadow: 0 2px 8px rgba(13, 57, 248, 0.25);
+    }
+
+    /* Caja de Definición Pedagógica de la Capa Activa */
+    .xray-definition-banner {
+      background: linear-gradient(135deg, #070c17, #111c34);
+      color: #ffffff;
+      padding: 14px 22px;
+      border-bottom: 2px solid var(--cyan);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .def-icon-badge {
+      background: var(--cyan);
+      color: var(--ink-deep);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.88rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .def-content h5 {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+
+    .def-content p {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.45;
+    }
+
+    .xray-body {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      min-height: 520px;
+    }
+
+    @media (max-width: 1050px) {
+      .xray-body { grid-template-columns: 1fr; }
+    }
+
+    .question-pane {
+      padding: 28px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+      border-right: 1px solid var(--line);
+    }
+
+    .question-block {
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      border: 2px solid transparent;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .block-context {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .block-enunciado {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+    }
+
+    .block-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-item {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line);
+      background: #ffffff;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: var(--transition);
+    }
+
+    .option-letter {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* Badges de Conexión DCE en la Pregunta */
+    .dce-connector-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      margin-top: 8px;
+    }
+
+    .connector-context {
+      background: var(--emerald-subtle);
+      color: #065f46;
+      border: 1px solid #10b981;
+    }
+
+    .connector-enunciado {
+      background: var(--blue-subtle);
+      color: var(--blue);
+      border: 1px solid var(--blue);
+    }
+
+    .connector-clave {
+      background: var(--purple-subtle);
+      color: #6d28d9;
+      border: 1px solid var(--purple);
+    }
+
+    /* HIGHLIGHTS SEGÚN CAPAS */
+    .highlight-context {
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.45);
+      border-color: var(--emerald) !important;
+      background: #ecfdf5 !important;
+    }
+
+    .highlight-enunciado {
+      box-shadow: 0 0 0 3px rgba(13, 57, 248, 0.45);
+      border-color: var(--blue) !important;
+      background: #eef2ff !important;
+    }
+
+    .highlight-clave {
+      border-color: var(--emerald) !important;
+      background: #f0fdf4 !important;
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25);
+    }
+
+    .highlight-distractor {
+      border-color: #fecdd3 !important;
+      background: #fff1f2 !important;
+    }
+
+    .meta-pane {
+      background: var(--ink-deep);
+      color: #ffffff;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    .meta-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .meta-card-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .meta-card-val {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.45;
+    }
+
+    .meta-glow-active {
+      border-color: var(--cyan) !important;
+      background: rgba(19, 162, 242, 0.16) !important;
+      box-shadow: 0 0 16px rgba(19, 162, 242, 0.35);
+    }
+
+    /* ==========================================================================
+       MÓDULO 5: NIVELES DE DESEMPEÑO Y MCER
+       ========================================================================== */
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .level-card {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .level-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+
+    .lvl-1::before { background: var(--rose); }
+    .lvl-2::before { background: var(--amber); }
+    .lvl-3::before { background: var(--blue); }
+    .lvl-4::before { background: var(--emerald); }
+
+    .level-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      width: fit-content;
+    }
+
+    .lvl-1 .level-badge { background: var(--rose-subtle); color: #be123c; }
+    .lvl-2 .level-badge { background: var(--amber-subtle); color: #b45309; }
+    .lvl-3 .level-badge { background: var(--blue-subtle); color: var(--blue); }
+    .lvl-4 .level-badge { background: var(--emerald-subtle); color: #047857; }
+
+    .mcer-scale-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .mcer-step {
+      background: var(--paper);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      padding: 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .mcer-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .mcer-range {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: #ffffff;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+    }
+
+    /* ==========================================================================
+       MÓDULO 6: PLANES DE CHOQUE Y GENERADOR RÁPIDO
+       ========================================================================== */
+    .shock-plan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .shock-step-card {
+      background: var(--paper);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      padding: 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .shock-icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px var(--cyan-glow);
+    }
+
+    .shock-info h4 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .shock-info p {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .shock-generator-box {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 2px dashed var(--blue);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .shock-form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .shock-form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .shock-form-field label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .shock-input-field {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line);
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 600;
+      outline: none;
+      background: #ffffff;
+      color: var(--ink);
+      transition: var(--transition);
+    }
+
+    .shock-input-field:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(13, 57, 248, 0.12);
+    }
+
+    select.shock-input-field {
+      cursor: pointer;
+    }
+
+    .btn-action-primary {
+      padding: 12px 26px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px var(--cyan-glow);
+      transition: var(--transition);
+    }
+
+    .btn-action-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(13, 57, 248, 0.35);
+    }
+
+    /* FOOTER */
+    .site-footer {
+      background: var(--ink-deep);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 24px max(3vw, 24px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR NAVEGACIÓN Y CONTROLES -->
+  <header class="top-control-bar">
+    <div class="top-control-container">
+      <div class="brand-mini">
+        <span class="brand-logo-pill">Edúcate Colombia</span>
+        <div class="brand-title-mini">
+          <span>Simulacros Saber ICFES</span> · Analítica Técnica & Metodología
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <!-- Selector de Modo: Dashboard vs Diapositivas -->
+        <div class="view-mode-toggles">
+          <button class="mode-btn active" id="btn-mode-dashboard" onclick="setMode('dashboard')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Dashboard
+          </button>
+          <button class="mode-btn" id="btn-mode-presentation" onclick="setMode('presentation')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            Modo Presentación
+          </button>
+        </div>
+
+        <!-- Navegación de Diapositivas (activa en modo presentación) -->
+        <div class="presentation-nav" id="pres-nav-controls">
+          <button class="pres-btn" onclick="prevSlide()" title="Diapositiva anterior (Flecha Izquierda)">←</button>
+          <span class="pres-counter" id="pres-slide-num">1 / 6</span>
+          <button class="pres-btn" onclick="nextSlide()" title="Diapositiva siguiente (Flecha Derecha / Espacio)">→</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE PESTAÑAS HORIZONTALES (DASHBOARD) -->
+  <nav class="module-nav-bar" id="module-nav-bar">
+    <div class="module-nav-container">
+      <button class="module-tab-btn active" onclick="jumpToModule(0)">
+        <span>1. Ruta Gradual Comercial</span>
+        <span class="module-tab-badge">4 Fases · Portadas</span>
+      </button>
+      <button class="module-tab-btn" onclick="jumpToModule(1)">
+        <span>2. Desglose Saber 11°</span>
+        <span class="module-tab-badge">254 Ítems</span>
+      </button>
+      <button class="module-tab-btn" onclick="jumpToModule(2)">
+        <span>3. Competencias & Dificultad</span>
+        <span class="module-tab-badge">Selector por Prueba</span>
+      </button>
+      <button class="module-tab-btn" onclick="jumpToModule(3)">
+        <span>4. Desestructuración DCE (Rayos X)</span>
+        <span class="module-tab-badge">3 Grados · Conectores</span>
+      </button>
+      <button class="module-tab-btn" onclick="jumpToModule(4)">
+        <span>5. Niveles & MCER Inglés</span>
+        <span class="module-tab-badge">A- a B+</span>
+      </button>
+      <button class="module-tab-btn" onclick="jumpToModule(5)">
+        <span>6. Planes de Choque en Aula</span>
+        <span class="module-tab-badge">Auto-población DCE</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-wrapper" id="main-wrapper">
+
+    <!-- ==========================================================================
+         MÓDULO 1: RUTA GRADUAL COMERCIAL (CURVA DE MADURACIÓN)
+         ========================================================================== -->
+    <article class="content-section" id="mod-0" data-slide-title="Ruta Gradual de Simulacros">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-num">1</div>
+          <div>
+            <h2>Ruta Progresiva de Simulacros Saber (Fuerza Comercial & Directivos)</h2>
+            <p>Graduación psicométrica ordenada desde el piso diagnóstico hasta la alta exigencia competitiva.</p>
+          </div>
+        </div>
+        <span class="section-tag">Curva de Maduración Cognitiva</span>
+      </div>
+
+      <div class="route-grid">
+        <!-- Fase 1 -->
+        <div class="route-card step-1">
+          <span class="route-step-badge">Fase 1 · Diagnóstico Base</span>
+          <h3 class="route-card-title">Nivelación & Diagnóstico</h3>
+          
+          <!-- Galería de Portadas de Libros -->
+          <div class="route-books-gallery">
+            <!-- Portada Oficial de Dzeta 10° -->
+            <div class="book-cover-item" title="Simulacro Dzeta 10.° (Diagnóstico Base)">
+              <div class="book-cover-img-wrap">
+                <img src="portada-dzeta-10.png" onerror="this.src='assets/portada-dzeta-10.png'" alt="Dzeta 10°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Dzeta</span>
+              <span class="book-cover-grade">Grado 10.°</span>
+            </div>
+
+            <!-- Portada Sigma 10° -->
+            <div class="book-cover-item" title="Simulacro Sigma 10.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-11.webp" onerror="this.src='assets/portada-11.webp'" alt="Sigma 10°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Sigma</span>
+              <span class="book-cover-grade">Grado 10.°</span>
+            </div>
+
+            <!-- Portada Sigma 11° -->
+            <div class="book-cover-item" title="Simulacro Sigma 11.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-25.webp" onerror="this.src='assets/portada-25.webp'" alt="Sigma 11°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Sigma</span>
+              <span class="book-cover-grade">Grado 11.°</span>
+            </div>
+          </div>
+
+          <div class="route-desc-box">
+            Textos de menor densidad y preguntas orientadas al reconocimiento conceptual. Ideal para aplicar al inicio del año escolar (febrero - marzo).
+          </div>
+          <div class="route-sales-pitch">
+            💡 <strong>Argumento de Venta:</strong> "Detecta el piso real de los estudiantes antes de iniciar el plan curricular para evitar frustración temprana y orientar la nivelación."
+          </div>
+        </div>
+
+        <!-- Fase 2 -->
+        <div class="route-card step-2">
+          <span class="route-step-badge">Fase 2 · Afianzamiento</span>
+          <h3 class="route-card-title">Desarrollo Formativo</h3>
+          
+          <!-- Galería de Portadas de Libros -->
+          <div class="route-books-gallery">
+            <div class="book-cover-item" title="Simulacro Épsilon 10.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-03.webp" onerror="this.src='assets/portada-03.webp'" alt="Épsilon 10°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Épsilon</span>
+              <span class="book-cover-grade">Grado 10.°</span>
+            </div>
+            <div class="book-cover-item" title="Simulacro Épsilon 11.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-13.webp" onerror="this.src='assets/portada-13.webp'" alt="Épsilon 11°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Épsilon</span>
+              <span class="book-cover-grade">Grado 11.°</span>
+            </div>
+            <div class="book-cover-item" title="Simulacro Kappa 10.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-05.webp" onerror="this.src='assets/portada-05.webp'" alt="Kappa 10°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Kappa</span>
+              <span class="book-cover-grade">Grado 10.°</span>
+            </div>
+          </div>
+
+          <div class="route-desc-box">
+            Alineación estándar con el ICFES (~50% dificultad media). Énfasis en indagación científica, análisis de gráficas y contraste de premisas.
+          </div>
+          <div class="route-sales-pitch">
+            💡 <strong>Argumento de Venta:</strong> "Entrena la aplicación de conceptos en situaciones cotidianas y fortalece la comprensión lectora crítica en la mitad del ciclo lectivo."
+          </div>
+        </div>
+
+        <!-- Fase 3 -->
+        <div class="route-card step-3">
+          <span class="route-step-badge">Fase 3 · Simulación Real</span>
+          <h3 class="route-card-title">Consolidación & Fatiga</h3>
+          
+          <!-- Galería de Portadas de Libros -->
+          <div class="route-books-gallery">
+            <div class="book-cover-item" title="Simulacro Kappa Premium 11.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-15.webp" onerror="this.src='assets/portada-15.webp'" alt="Kappa Premium 11°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Kappa Prem.</span>
+              <span class="book-cover-grade">Grado 11.°</span>
+            </div>
+            <div class="book-cover-item" title="Simulacro Máster Pro 10.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-09.webp" onerror="this.src='assets/portada-09.webp'" alt="Máster Pro 10°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Máster Pro</span>
+              <span class="book-cover-grade">Grado 10.°</span>
+            </div>
+            <div class="book-cover-item" title="Simulacro Máster Pro 11.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-21.webp" onerror="this.src='assets/portada-21.webp'" alt="Máster Pro 11°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Máster Pro</span>
+              <span class="book-cover-grade">Grado 11.°</span>
+            </div>
+          </div>
+
+          <div class="route-desc-box">
+            Dos sesiones completas de 4h 30m cronometradas. Distractores de alta plausibilidad diseñados para medir control del tiempo y resistencia mental.
+          </div>
+          <div class="route-sales-pitch">
+            💡 <strong>Argumento de Venta:</strong> "Recrea el día del examen oficial; entrena el ritmo biológico y la gestión de 2 minutos por pregunta bajo fatiga real."
+          </div>
+        </div>
+
+        <!-- Fase 4 -->
+        <div class="route-card step-4">
+          <span class="route-step-badge">Fase 4 · Alta Exigencia</span>
+          <h3 class="route-card-title">Élite & Desempate</h3>
+          
+          <!-- Galería de Portadas de Libros -->
+          <div class="route-books-gallery">
+            <div class="book-cover-item" title="Simulacro Máster Elite 9.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-01.webp" onerror="this.src='assets/portada-01.webp'" alt="Máster Elite 9°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Máster Elite</span>
+              <span class="book-cover-grade">Grado 9.°</span>
+            </div>
+            <div class="book-cover-item" title="Simulacro Máster Elite 10.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-07.webp" onerror="this.src='assets/portada-07.webp'" alt="Máster Elite 10°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Máster Elite</span>
+              <span class="book-cover-grade">Grado 10.°</span>
+            </div>
+            <div class="book-cover-item" title="Simulacro Máster Elite 11.°">
+              <div class="book-cover-img-wrap">
+                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-17.webp" onerror="this.src='assets/portada-17.webp'" alt="Máster Elite 11°" class="book-cover-img">
+              </div>
+              <span class="book-cover-title">Máster Elite</span>
+              <span class="book-cover-grade">Grado 11.°</span>
+            </div>
+          </div>
+
+          <div class="route-desc-box">
+            Ítems de nivel de dificultad superior. Textos filosóficos densos, problemas no rutinarios y pensamiento sistémico avanzado. Para aspirantes a becas.
+          </div>
+          <div class="route-sales-pitch">
+            💡 <strong>Argumento de Venta:</strong> "El simulacro definitivo para empujar el promedio institucional al top 10% y asegurar puntajes superiores a 380."
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==========================================================================
+         MÓDULO 2: DESGLOSE TÉCNICO TIPO ICFES SABER 11°
+         ========================================================================== -->
+    <article class="content-section" id="mod-1" data-slide-title="Desglose Técnico ICFES">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-num">2</div>
+          <div>
+            <h2>Desglose del Diseño Tipo ICFES Saber 11° (Ítems, Hojas y Tiempos)</h2>
+            <p>Estructura idéntica a la prueba oficial del Instituto Colombiano para la Evaluación de la Educación.</p>
+          </div>
+        </div>
+        <span class="section-tag">254 Ítems Totales</span>
+      </div>
+
+      <div class="icfes-table-wrap">
+        <table class="icfes-table">
+          <thead>
+            <tr>
+              <th>Sesión Oficial</th>
+              <th>Prueba Evaluada</th>
+              <th>Número de Ítems</th>
+              <th>Tiempo Estimado</th>
+              <th>Enfoque Evaluativo Clave</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
+              <td><strong>Matemáticas 1</strong></td>
+              <td>25 preguntas</td>
+              <td>50 minutos</td>
+              <td>Enfoque en Razonamiento Cuantitativo y Álgebra</td>
+            </tr>
+            <tr>
+              <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
+              <td><strong>Lectura Crítica</strong></td>
+              <td>41 preguntas</td>
+              <td>85 minutos</td>
+              <td>Textos continuos (filosóficos y literarios) y discontinuos</td>
+            </tr>
+            <tr>
+              <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
+              <td><strong>Sociales y Ciudadanas 1</strong></td>
+              <td>25 preguntas</td>
+              <td>50 minutos</td>
+              <td>Pensamiento social, Constitución Política y contexto histórico</td>
+            </tr>
+            <tr>
+              <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
+              <td><strong>Ciencias Naturales 1</strong></td>
+              <td>29 preguntas</td>
+              <td>60 minutos</td>
+              <td>Química y Biología básica / Indagación de fenómenos</td>
+            </tr>
+            <tr>
+              <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
+              <td><strong>Cuestionario Socioeconómico</strong></td>
+              <td>11 preguntas</td>
+              <td>15 minutos</td>
+              <td>Caracterización contextual (no afecta el puntaje global)</td>
+            </tr>
+            <tr style="background: var(--paper); font-weight: 800;">
+              <td><strong>Subtotal Sesión 1</strong></td>
+              <td><strong>4 Pruebas Puntuables</strong></td>
+              <td><strong>131 ítems (120 puntuables)</strong></td>
+              <td><strong>4 horas y 30 minutos</strong></td>
+              <td><strong>Mide frescura cognitiva y concentración matutina</strong></td>
+            </tr>
+            <tr>
+              <td><span class="badge-session">Sesión 2 (Tarde)</span></td>
+              <td><strong>Sociales y Ciudadanas 2</strong></td>
+              <td>25 preguntas</td>
+              <td>50 minutos</td>
+              <td>Análisis de perspectivas en conflicto y pensamiento sistémico</td>
+            </tr>
+            <tr>
+              <td><span class="badge-session">Sesión 2 (Tarde)</span></td>
+              <td><strong>Matemáticas 2</strong></td>
+              <td>25 preguntas</td>
+              <td>50 minutos</td>
+              <td>Geometría, trigonometría, estadística y probabilidad</td>
+            </tr>
+            <tr>
+              <td><span class="badge-session">Sesión 2 (Tarde)</span></td>
+              <td><strong>Ciencias Naturales 2</strong></td>
+              <td>29 preguntas</td>
+              <td>60 minutos</td>
+              <td>Física, entorno vivo y CTS (Ciencia, Tecnología y Sociedad)</td>
+            </tr>
+            <tr>
+              <td><span class="badge-session">Sesión 2 (Tarde)</span></td>
+              <td><strong>Inglés (Partes 1 a 7)</strong></td>
+              <td>55 preguntas</td>
+              <td>80 minutos</td>
+              <td>Desde avisos básicos (A1) hasta comprensión inferencial (B+)</td>
+            </tr>
+            <tr style="background: var(--paper); font-weight: 800;">
+              <td><strong>Subtotal Sesión 2</strong></td>
+              <td><strong>4 Pruebas Puntuables</strong></td>
+              <td><strong>134 preguntas</strong></td>
+              <td><strong>4 horas y 30 minutos</strong></td>
+              <td><strong>Prueba de resistencia a la fatiga y discriminación fina</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <!-- ==========================================================================
+         MÓDULO 3: MATRIZ DE COMPETENCIAS Y SELECTOR DE DIFICULTAD POR PRUEBA
+         ========================================================================== -->
+    <article class="content-section" id="mod-2" data-slide-title="Competencias y Dificultad">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-num">3</div>
+          <div>
+            <h2>Distribución de Competencias y Dificultad Psicométrica por Prueba</h2>
+            <p>Seleccione el simulacro específico para auditar la proporción de dificultad (Baja, Media y Alta) y competencias oficiales.</p>
+          </div>
+        </div>
+        <span class="section-tag">Auditoría Psicométrica</span>
+      </div>
+
+      <!-- Barra de Filtros: Selector de Prueba + Selector de Área -->
+      <div class="diff-filter-toolbar">
+        <div class="diff-select-group">
+          <label class="diff-select-label" for="select-test-difficulty">
+            <span>📚 Seleccionar Simulacro:</span>
+          </label>
+          <select class="diff-dropdown" id="select-test-difficulty" onchange="changeTestDifficulty(this.value)">
+            <option value="all">Todas las Pruebas (Matriz Base ICFES)</option>
+            <option value="dzeta">Simulacro Dzeta 10.° (Diagnóstica Base)</option>
+            <option value="sigma">Simulacro Sigma 10° / 11° (Diagnóstica)</option>
+            <option value="epsilon">Simulacro Épsilon 10° / 11° (Formativa Estándar)</option>
+            <option value="kappa">Simulacro Kappa 10° / Kappa Premium 11° (Consolidación)</option>
+            <option value="master_pro">Simulacro Máster Pro 10° / 11° (Simulación Completa)</option>
+            <option value="master_elite">Simulacro Máster Elite 9° / 10° / 11° (Alta Exigencia Élite)</option>
+          </select>
+        </div>
+
+        <!-- Selector interactivo de área -->
+        <div class="area-selector-tabs">
+          <button class="area-btn active" onclick="showAreaMatrix('mat')">📐 Matemáticas (50 ítems)</button>
+          <button class="area-btn" onclick="showAreaMatrix('lec')">📖 Lectura Crítica (41 ítems)</button>
+          <button class="area-btn" onclick="showAreaMatrix('soc')">🌐 Sociales (50 ítems)</button>
+          <button class="area-btn" onclick="showAreaMatrix('nat')">🔬 Ciencias Nat. (58 ítems)</button>
+          <button class="area-btn" onclick="showAreaMatrix('ing')">🗣️ Inglés (55 ítems)</button>
+        </div>
+      </div>
+
+      <div class="matrix-display-card" id="matrix-display-card">
+        <!-- Render dinámico según área y prueba seleccionada -->
+      </div>
+    </article>
+
+    <!-- ==========================================================================
+         MÓDULO 4: ANATOMÍA DE LA PREGUNTA ICFES (VISOR RAYOS X - DCE)
+         ========================================================================== -->
+    <article class="content-section" id="mod-3" data-slide-title="Desestructuración de Preguntas">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-num">4</div>
+          <div>
+            <h2>Anatomía y Desestructuración de Preguntas ICFES (Visor Rayos X)</h2>
+            <p>Diseño Centrado en Evidencias (DCE): Vinculación directa entre partes de la pregunta y especificaciones técnicas.</p>
+          </div>
+        </div>
+        <span class="section-tag">Transferencia Pedagógica</span>
+      </div>
+
+      <div class="xray-container">
+        <!-- Barra superior de selección -->
+        <div class="xray-toolbar">
+          <div class="grade-selector-group">
+            <span style="font-size: 0.76rem; font-weight: 800; color: var(--muted); text-transform: uppercase;">Ejemplo por Grado:</span>
+            <button class="grade-chip-btn" onclick="loadXRayExample(9)">Grado 9.° (Matemáticas)</button>
+            <button class="grade-chip-btn" onclick="loadXRayExample(10)">Grado 10.° (Ciencias Nat.)</button>
+            <button class="grade-chip-btn active" onclick="loadXRayExample(11)">Grado 11.° (Lectura Crítica)</button>
+          </div>
+
+          <div class="layer-toggles-group">
+            <span style="font-size: 0.76rem; font-weight: 800; color: var(--muted); text-transform: uppercase;">Capas Psicométricas:</span>
+            <button class="layer-btn active" id="btn-layer-all" onclick="toggleLayer('all')">Ver Completa</button>
+            <button class="layer-btn" id="btn-layer-context" onclick="toggleLayer('context')">1. Contexto</button>
+            <button class="layer-btn" id="btn-layer-enunciado" onclick="toggleLayer('enunciado')">2. Enunciado</button>
+            <button class="layer-btn" id="btn-layer-clave" onclick="toggleLayer('clave')">3. Clave & Distractores</button>
+            <button class="layer-btn" id="btn-layer-sesgo" onclick="toggleLayer('sesgo')">4. Análisis de Sesgo</button>
+          </div>
+        </div>
+
+        <!-- Banner de Definición Pedagógica de la Capa Seleccionada -->
+        <div class="xray-definition-banner" id="xray-def-banner">
+          <div class="def-icon-badge" id="def-badge-icon">ℹ️</div>
+          <div class="def-content">
+            <h5 id="def-title">Visión Integral del Ítem (Marco DCE)</h5>
+            <p id="def-text">En el Diseño Centrado en Evidencias, una pregunta ICFES no es un texto aislado, sino un instrumento estandarizado compuesto por Estímulo (Contexto), Tarea Cognitiva (Enunciado), Opciones estructuradas y Criterios de Clave/Distractor conectados a evidencias medibles.</p>
+          </div>
+        </div>
+
+        <div class="xray-body">
+          <!-- Columna izquierda: La Pregunta con Conectores Visuales -->
+          <div class="question-pane" id="xray-question-pane">
+            <!-- Render dinámico -->
+          </div>
+
+          <!-- Columna derecha: Ficha Psicométrica DCE con Iluminación Reactiva -->
+          <div class="meta-pane" id="xray-meta-pane">
+            <!-- Render dinámico -->
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==========================================================================
+         MÓDULO 5: NIVELES DE DESEMPEÑO Y MARCO COMÚN EUROPEO (MCER)
+         ========================================================================== -->
+    <article class="content-section" id="mod-4" data-slide-title="Niveles de Desempeño y MCER">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-num">5</div>
+          <div>
+            <h2>Niveles de Desempeño ICFES y Alineación MCER (Inglés)</h2>
+            <p>Escala cuantitativa (0-100 puntos) y descriptores cualitativos para interpretar el reporte individual e institucional.</p>
+          </div>
+        </div>
+        <span class="section-tag">Interpretación de Resultados</span>
+      </div>
+
+      <div>
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--ink);">
+          Los 4 Niveles de Desempeño Generales (Matemáticas, Lectura, Sociales y Ciencias)
+        </h3>
+        <p style="font-size: 0.86rem; color: var(--muted); margin-bottom: 16px;">
+          Cada área evalúa al estudiante en cuatro categorías jerárquicas:
+        </p>
+        <div class="levels-grid">
+          <div class="level-card lvl-1">
+            <span class="level-badge">Nivel 1 (0 - 35 pts)</span>
+            <h4 style="font-weight: 800; font-size: 1.05rem;">Insuficiente</h4>
+            <p style="font-size: 0.83rem; color: var(--muted); line-height: 1.45;">
+              El estudiante no demuestra los aprendizajes mínimos. Dificultad para extraer información explícita de textos sencillos o interpretar tablas directas. Requiere nivelación de base.
+            </p>
+          </div>
+
+          <div class="level-card lvl-2">
+            <span class="level-badge">Nivel 2 (36 - 50 pts)</span>
+            <h4 style="font-weight: 800; font-size: 1.05rem;">Mínimo</h4>
+            <p style="font-size: 0.83rem; color: var(--muted); line-height: 1.45;">
+              Reconoce conceptos fundamentales y realiza operaciones aritméticas o deducciones locales. Puede caer en distractores que apelan a conocimientos intuitivos no científicos.
+            </p>
+          </div>
+
+          <div class="level-card lvl-3">
+            <span class="level-badge">Nivel 3 (51 - 70 pts)</span>
+            <h4 style="font-weight: 800; font-size: 1.05rem;">Satisfactorio</h4>
+            <p style="font-size: 0.83rem; color: var(--muted); line-height: 1.45;">
+              Nivel esperado para la educación media. Relaciona variables, valida hipótesis, identifica la intención del autor y resuelve problemas no rutinarios con modelos formales.
+            </p>
+          </div>
+
+          <div class="level-card lvl-4">
+            <span class="level-badge">Nivel 4 (71 - 100 pts)</span>
+            <h4 style="font-weight: 800; font-size: 1.05rem;">Avanzado</h4>
+            <p style="font-size: 0.83rem; color: var(--muted); line-height: 1.45;">
+              Pensamiento crítico reflexivo superior. Detecta falacias sofisticadas, juzga la validez epistemológica de argumentos y modela sistemas complejos. Perfil para becas de excelencia.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MCER Inglés -->
+      <div style="margin-top: 10px;">
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--ink);">
+          Alineación de la Prueba de Inglés con el Marco Común Europeo (MCER)
+        </h3>
+        <p style="font-size: 0.86rem; color: var(--muted); margin-bottom: 14px;">
+          En Colombia, el Ministerio de Educación y el ICFES clasifican la prueba en 5 bandas según el MCER:
+        </p>
+        <div class="mcer-scale-bar">
+          <div class="mcer-step">
+            <div class="mcer-code">A-</div>
+            <div class="mcer-range">0 - 47 puntos</div>
+            <strong style="font-size: 0.82rem; margin-top: 4px;">Bajo Principiante</strong>
+            <p style="font-size: 0.75rem; color: var(--muted);">No alcanza el vocabulario elemental de la Parte 1 ni reconoce avisos cotidianos.</p>
+          </div>
+
+          <div class="mcer-step">
+            <div class="mcer-code">A1</div>
+            <div class="mcer-range">48 - 57 puntos</div>
+            <strong style="font-size: 0.82rem; margin-top: 4px;">Acceso Elemental</strong>
+            <p style="font-size: 0.75rem; color: var(--muted);">Comprende saludos, avisos de lugares públicos y emparejamiento léxico básico.</p>
+          </div>
+
+          <div class="mcer-step">
+            <div class="mcer-code">A2</div>
+            <div class="mcer-range">58 - 67 puntos</div>
+            <strong style="font-size: 0.82rem; margin-top: 4px;">Plataforma Básica</strong>
+            <p style="font-size: 0.75rem; color: var(--muted);">Intercambios comunicativos cortos (Parte 3) y lectura de textos descriptivos simples.</p>
+          </div>
+
+          <div class="mcer-step" style="border-color: var(--blue); background: var(--blue-subtle);">
+            <div class="mcer-code" style="color: var(--blue);">B1</div>
+            <div class="mcer-range" style="background: var(--blue); color: #ffffff;">68 - 78 puntos</div>
+            <strong style="font-size: 0.82rem; margin-top: 4px; color: var(--blue);">Umbral / Estándar MEN</strong>
+            <p style="font-size: 0.75rem; color: var(--ink);">Meta esperada para graduados de 11°. Comprensión inferencial de artículos y gramática.</p>
+          </div>
+
+          <div class="mcer-step" style="border-color: var(--emerald); background: var(--emerald-subtle);">
+            <div class="mcer-code" style="color: #047857;">B+</div>
+            <div class="mcer-range" style="background: #047857; color: #ffffff;">79 - 100 puntos</div>
+            <strong style="font-size: 0.82rem; margin-top: 4px; color: #047857;">Nivel Superior</strong>
+            <p style="font-size: 0.75rem; color: #065f46;">Resuelve textos complejos (Parte 7 - cloze léxico avanzado) con precisión nativa.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==========================================================================
+         MÓDULO 6: PLANES DE CHOQUE Y TRANSFERENCIA DOCENTE (DCE ESTRUCTURADO)
+         ========================================================================== -->
+    <article class="content-section" id="mod-5" data-slide-title="Metodología de Planes de Choque">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-num">6</div>
+          <div>
+            <h2>Inducción al Docente: Metodología de Planes de Choque en el Aula</h2>
+            <p>Estrategia de ciclo corto para transformar los resultados del simulacro en remediación pedagógica inmediata.</p>
+          </div>
+        </div>
+        <span class="section-tag">Pedagogía Aplicada</span>
+      </div>
+
+      <div class="shock-plan-grid">
+        <div class="shock-step-card">
+          <div class="shock-icon-circle">📊</div>
+          <div class="shock-info">
+            <h4>Paso 1: Mapeo de la Brecha Crítica (Semáforo de Ítems)</h4>
+            <p>El docente no debe limitarse a entregar una nota global. Debe descargar la sábana de respuestas y localizar las 3 evidencias donde más del 50% de los estudiantes marcaron el distractor típico.</p>
+          </div>
+        </div>
+
+        <div class="shock-step-card">
+          <div class="shock-icon-circle">📁</div>
+          <div class="shock-info">
+            <h4>Paso 2: Activación del Cuadernillo de Mejoramiento</h4>
+            <p>Se vincula de inmediato el <strong>Plan de Mejoramiento Oficial</strong> correspondiente a la tríada Competencia - Afirmación - Evidencia de Grupo Edúcate Colombia.</p>
+          </div>
+        </div>
+
+        <div class="shock-step-card">
+          <div class="shock-icon-circle">🔍</div>
+          <div class="shock-info">
+            <h4>Paso 3: Taller de Desestructuración del Error (Sin Punición)</h4>
+            <p>En el tablero, el profesor analiza con el grupo: <em>"¿Por qué la opción C parecía correcta pero incurría en una falacia de generalización apresurada?"</em> El aprendizaje ocurre al desarmar el distractor.</p>
+          </div>
+        </div>
+
+        <div class="shock-step-card">
+          <div class="shock-icon-circle">⏱️</div>
+          <div class="shock-info">
+            <h4>Paso 4: Mini-Ticket de Salida (Micro-Control 48 Horas)</h4>
+            <p>Aplicación de un micro-test de 3 a 5 ítems de la misma evidencia 48 horas después para verificar que la brecha cognitiva fue cerrada y los estudiantes ganaron confianza.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GENERADOR DE PLAN DE CHOQUE INTERACTIVO CON NAVEGACIÓN DCE (GUÍA DE ORIENTACIÓN SABER 11) -->
+      <div class="shock-generator-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-bottom: 1.5px solid var(--line-subtle); padding-bottom: 14px;">
+          <div>
+            <h3 style="font-size: 1.18rem; font-weight: 800; color: var(--blue);">
+              ⚡ Generador Oficial de Plan de Choque Institucional (DCE Integrado)
+            </h3>
+            <p style="font-size: 0.84rem; color: var(--muted); margin-top: 2px;">
+              Al seleccionar la prueba y el área, se despliegan sus componentes curriculares. La competencia, afirmación y evidencia se sincronizan directamente con las Guías de Orientación del ICFES.
+            </p>
+          </div>
+          <button class="btn-action-primary" onclick="exportShockPlan()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Imprimir / Guardar Ficha Oficial
+          </button>
+        </div>
+
+        <!-- Fila 1: Simulacro, Área y Componente (Desplegable dinámico según área) -->
+        <div class="shock-form-row">
+          <div class="shock-form-field">
+            <label for="sp-simulacro">1. Simulacro Aplicado:</label>
+            <select class="shock-input-field" id="sp-simulacro" onchange="onTestOrAreaChange()">
+              <optgroup label="Grado 11.° (Media Académica)">
+                <option value="saber-11-master-elite">Máster Elite 11.° (Fase Élite 2026)</option>
+                <option value="saber-11-kappa-premium">Kappa Premium 11.° (Fase Consolidación)</option>
+                <option value="saber-11-epsilon">Épsilon 11.° (Fase Formativa 2026)</option>
+                <option value="saber-11-sigma">Sigma 11.° (Fase Diagnóstica)</option>
+              </optgroup>
+              <optgroup label="Grado 10.° (Media Académica)">
+                <option value="saber-10-dzeta">Dzeta 10.° (Fase Diagnóstica Base 2026)</option>
+                <option value="saber-10-sigma">Sigma 10.° (Fase Diagnóstica)</option>
+                <option value="saber-10-epsilon">Épsilon 10.° (Fase Formativa)</option>
+                <option value="saber-10-kappa">Kappa 10.° (Fase Consolidación)</option>
+                <option value="saber-10-master-elite">Máster Elite 10.° (Fase Élite)</option>
+              </optgroup>
+              <optgroup label="Grado 9.° (Básica Secundaria)">
+                <option value="saber-9-master-elite">Máster Elite 9.° (Básica Secundaria)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="shock-form-field">
+            <label for="sp-area">2. Área con Brecha:</label>
+            <select class="shock-input-field" id="sp-area" onchange="onAreaChange()">
+              <option value="Matemáticas">Matemáticas</option>
+              <option value="Lectura Crítica">Lectura Crítica</option>
+              <option value="Ciencias Naturales">Ciencias Naturales</option>
+              <option value="Ciencias Sociales">Ciencias Sociales y Ciudadanas</option>
+              <option value="Inglés">Inglés</option>
+            </select>
+          </div>
+
+          <div class="shock-form-field">
+            <label for="sp-componente">3. Componente Curricular Crítico (Dinámico):</label>
+            <!-- Desplegable dinámico según área -->
+            <select class="shock-input-field" id="sp-componente" onchange="onComponenteChange()">
+              <!-- Poblado por JS -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Fila 2: Tríada DCE (Competencia, Afirmación, Evidencia según Guía de Orientación) -->
+        <div class="shock-form-row">
+          <div class="shock-form-field">
+            <label for="sp-competencia">4. Competencia Evaluada (ICFES DCE):</label>
+            <select class="shock-input-field" id="sp-competencia" onchange="onCompetenciaChange()">
+              <!-- Poblado por JS -->
+            </select>
+          </div>
+
+          <div class="shock-form-field" style="grid-column: span 2;">
+            <label for="sp-afirmacion">5. Afirmación del Estándar (Saber Qué):</label>
+            <select class="shock-input-field" id="sp-afirmacion" onchange="onAfirmacionChange()">
+              <!-- Poblado dinámicamente con las afirmaciones del área según la Guía de Orientación Saber 11 -->
+            </select>
+          </div>
+        </div>
+
+        <div class="shock-form-row">
+          <div class="shock-form-field" style="grid-column: 1 / -1;">
+            <label for="sp-evidencia">6. Evidencia o Tarea Crítica a Remediar (Saber Cómo):</label>
+            <select class="shock-input-field" id="sp-evidencia" onchange="onEvidenciaChange()">
+              <!-- Poblado dinámicamente con las evidencias correspondientes a la afirmación seleccionada -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Fila 3: Plan de Mejoramiento Asignado, Docente y Fecha -->
+        <div class="shock-form-row">
+          <div class="shock-form-field">
+            <label for="sp-pm">7. Plan de Mejoramiento Oficial Asignado:</label>
+            <input type="text" class="shock-input-field" id="sp-pm" readonly style="background: #f8fafc; font-weight: 700; color: var(--blue);" />
+          </div>
+
+          <div class="shock-form-field">
+            <label for="sp-docente">8. Docente / Equipo Responsable (Espacio para escritura):</label>
+            <input type="text" class="shock-input-field" id="sp-docente" placeholder="Escriba el nombre del docente o departamento..." value="Departamento de Matemáticas y Ciencias" />
+          </div>
+
+          <div class="shock-form-field">
+            <label for="sp-fecha">9. Fecha de Mini-Control (48 Horas):</label>
+            <input type="date" class="shock-input-field" id="sp-fecha" value="2026-11-05" />
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div>
+        <strong>Grupo Edúcate Colombia © 2026</strong> · 10 Años Fortaleciendo la Calidad Educativa del País
+      </div>
+      <div>
+        Herramienta Técnica para Capacitación de Asesores Comerciales y Transferencia Pedagógica Docente
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       DATOS Y LÓGICA JAVASCRIPT
+       ========================================================================== -->
+  <script>
+    // MATRICES BASE DE COMPETENCIAS Y DIFICULTAD POR ÁREA
+    const MATRIX_DATA = {
+      mat: {
+        title: "Matemáticas (50 Ítems · 2 Sesiones)",
+        competencies: [
+          { name: "Interpretación y Representación", pct: 34, items: "17 ítems", desc: "Comprende y transforma información cuantitativa en formatos gráficos, tabulares y diagramas." },
+          { name: "Formulación y Ejecución", pct: 43, items: "22 ítems", desc: "Diseña estrategias de cálculo, resuelve algoritmos y modela soluciones matemáticas a situaciones problema." },
+          { name: "Argumentación", pct: 23, items: "11 ítems", desc: "Valida o refuta afirmaciones, identifica suposiciones y justifica la consistencia de un procedimiento." }
+        ],
+        components: [
+          { name: "Numérico - Variacional", pct: 35, desc: "Aritmética, proporciones, álgebra de funciones y ecuaciones." },
+          { name: "Geométrico - Métrico", pct: 35, desc: "Áreas, volúmenes, trigonometría, semejanzas y transformaciones." },
+          { name: "Aleatorio / Estadística", pct: 30, desc: "Medidas de tendencia central, probabilidad simple y conteo." }
+        ],
+        difficulty: { low: 26, med: 52, high: 22 }
+      },
+      lec: {
+        title: "Lectura Crítica (41 Ítems · Sesión 1)",
+        competencies: [
+          { name: "1. Identificar y Entender Contenidos Locales", pct: 25, items: "10 ítems", desc: "Reconoce el significado literal de palabras, frases o expresiones dentro de una oración." },
+          { name: "2. Comprensión del Sentido Global", pct: 42, items: "17 ítems", desc: "Sintetiza la tesis central, reconoce la relación entre párrafos y la progresión temática del texto." },
+          { name: "3. Reflexión y Juicio Crítico", pct: 33, items: "14 ítems", desc: "Evalúa la validez de los argumentos, identifica sesgos, tono del autor y estrategias retóricas." }
+        ],
+        components: [
+          { name: "Componente Semántico", pct: 45, desc: "Sentido global, intenciones, argumentos centrales y contraargumentos." },
+          { name: "Componente Sintáctico", pct: 30, desc: "Estructuras oracionales, conectores lógicos y progresión discursiva." },
+          { name: "Componente Pragmático", pct: 25, desc: "Contexto comunicativo, propósitos del autor y análisis de sesgos." }
+        ],
+        difficulty: { low: 24, med: 54, high: 22 }
+      },
+      soc: {
+        title: "Sociales y Ciudadanas (50 Ítems · 2 Sesiones)",
+        competencies: [
+          { name: "Pensamiento Social", pct: 30, items: "15 ítems", desc: "Reconoce conceptos de las ciencias sociales, periodos históricos y dinámicas geográficas." },
+          { name: "Interpretación y Análisis de Perspectivas", pct: 40, items: "20 ítems", desc: "Examina los intereses, prejuicios y puntos de vista de diversos actores sociales en conflicto." },
+          { name: "Pensamiento Reflexivo y Sistémico", pct: 30, items: "15 ítems", desc: "Comprende la complejidad social evaluando causas multifactoriales y consecuencias indirectas." }
+        ],
+        components: [
+          { name: "Ético - Político y Competencias Ciudadanas", pct: 50, desc: "Constitución Política, tutela, derechos fundamentales y mecanismos de participación." },
+          { name: "Historia y Cultura", pct: 30, desc: "Transformaciones sociales, dictaduras, guerras mundiales y conflicto armado." },
+          { name: "Espacio y Ambiente", pct: 20, desc: "Geografía humana, gestión de recursos naturales y ordenamiento territorial." }
+        ],
+        difficulty: { low: 28, med: 50, high: 22 }
+      },
+      nat: {
+        title: "Ciencias Naturales (58 Ítems · 2 Sesiones)",
+        competencies: [
+          { name: "Uso Comprensivo del Conocimiento Científico", pct: 30, items: "17 ítems", desc: "Asocia fenómenos cotidianos con principios termodinámicos, genéticos o electroquímicos." },
+          { name: "Explicación de Fenómenos", pct: 45, items: "26 ítems", desc: "Construye argumentos coherentes basados en modelos para dilucidar por qué ocurre un evento." },
+          { name: "Indagación", pct: 25, items: "15 ítems", desc: "Formula preguntas investigables, interpreta datos experimentales y evalúa conclusiones." }
+        ],
+        components: [
+          { name: "Entorno Físico", pct: 30, desc: "Cinemática, dinámica, energía, óptica, termodinámica y ondas." },
+          { name: "Entorno Químico", pct: 30, desc: "Estructura atómica, enlaces, estequiometría, gases y pH." },
+          { name: "Entorno Biológico / Vivo", pct: 30, desc: "Homeostasis, genética mendeliana, ecosistemas y evolución." },
+          { name: "Ciencia, Tecnología y Sociedad (CTS)", pct: 10, desc: "Bioética, impacto ambiental de energías y biotecnología." }
+        ],
+        difficulty: { low: 22, med: 53, high: 25 }
+      },
+      ing: {
+        title: "Inglés (55 Ítems · Sesión 2)",
+        competencies: [
+          { name: "Competencia Lingüística y Léxica", pct: 40, items: "22 preguntas", desc: "Vocabulario contextualizado y estructuras morfosintácticas precisas." },
+          { name: "Competencia Pragmática y Discursiva", pct: 35, items: "19 preguntas", desc: "Coherencia, actos de habla e intenciones comunicativas según la situación." },
+          { name: "Competencia Sociolingüística y Comprensión", pct: 25, items: "14 preguntas", desc: "Comprensión lectora inferencial y adecuación a registros formales e informales." }
+        ],
+        components: [
+          { name: "Léxico y Vocabulario (Partes 1, 2 y 7)", pct: 45, desc: "Avisos cotidianos, emparejamiento y cloze léxico avanzado (B+)." },
+          { name: "Gramatical y Sintáctico (Parte 4)", pct: 20, desc: "Tiempos verbales, conectores y preposiciones." },
+          { name: "Pragmático y Comunicativo (Parte 3)", pct: 15, desc: "Intercambios conversacionales cotidianos." },
+          { name: "Comprensión Lectora (Partes 5 y 6)", pct: 20, desc: "Lectura literal e inferencial de textos expositivos y de opinión." }
+        ],
+        difficulty: { low: 30, med: 45, high: 25 }
+      }
+    };
+
+    // PERFILES DE DIFICULTAD PSICOMÉTRICA SEGÚN EL SIMULACRO SELECCIONADO
+    const TEST_DIFFICULTY_PROFILES = {
+      all: {
+        name: "Matriz Base Estándar ICFES",
+        mat: { low: 26, med: 52, high: 22 },
+        lec: { low: 24, med: 54, high: 22 },
+        soc: { low: 28, med: 50, high: 22 },
+        nat: { low: 22, med: 53, high: 25 },
+        ing: { low: 30, med: 45, high: 25 }
+      },
+      dzeta: {
+        name: "Simulacro Dzeta 10.° (Diagnóstica Base)",
+        mat: { low: 40, med: 48, high: 12 },
+        lec: { low: 38, med: 50, high: 12 },
+        soc: { low: 42, med: 46, high: 12 },
+        nat: { low: 36, med: 52, high: 12 },
+        ing: { low: 45, med: 43, high: 12 }
+      },
+      sigma: {
+        name: "Simulacro Sigma 10° / 11° (Diagnóstica)",
+        mat: { low: 38, med: 48, high: 14 },
+        lec: { low: 36, med: 50, high: 14 },
+        soc: { low: 40, med: 46, high: 14 },
+        nat: { low: 34, med: 52, high: 14 },
+        ing: { low: 42, med: 44, high: 14 }
+      },
+      epsilon: {
+        name: "Simulacro Épsilon 10° / 11° (Formativa)",
+        mat: { low: 26, med: 54, high: 20 },
+        lec: { low: 24, med: 56, high: 20 },
+        soc: { low: 28, med: 52, high: 20 },
+        nat: { low: 24, med: 56, high: 20 },
+        ing: { low: 30, med: 50, high: 20 }
+      },
+      kappa: {
+        name: "Simulacro Kappa 10° / Kappa Premium 11° (Consolidación)",
+        mat: { low: 20, med: 55, high: 25 },
+        lec: { low: 20, med: 55, high: 25 },
+        soc: { low: 22, med: 53, high: 25 },
+        nat: { low: 18, med: 56, high: 26 },
+        ing: { low: 24, med: 50, high: 26 }
+      },
+      master_pro: {
+        name: "Simulacro Máster Pro 10° / 11° (Simulación Completa)",
+        mat: { low: 18, med: 54, high: 28 },
+        lec: { low: 18, med: 54, high: 28 },
+        soc: { low: 20, med: 52, high: 28 },
+        nat: { low: 16, med: 54, high: 30 },
+        ing: { low: 20, med: 52, high: 28 }
+      },
+      master_elite: {
+        name: "Simulacro Máster Elite 9° / 10° / 11° (Alta Exigencia Élite)",
+        mat: { low: 14, med: 51, high: 35 },
+        lec: { low: 12, med: 52, high: 36 },
+        soc: { low: 15, med: 50, high: 35 },
+        nat: { low: 12, med: 50, high: 38 },
+        ing: { low: 16, med: 48, high: 36 }
+      }
+    };
+
+    let currentSelectedTestKey = 'all';
+    let currentSelectedAreaKey = 'mat';
+
+    // DATOS DE EJEMPLOS PARA EL VISOR RAYOS X (ANATOMÍA ICFES)
+    const XRAY_EXAMPLES = {
+      9: {
+        grade: "Grado 9.°",
+        area: "Matemáticas · Pensamiento Espacial y Geométrico",
+        contextHtml: `Una institución educativa está diseñando un jardín triangular en el patio central. Para la instalación de un sistema de riego circular por aspersión que cubra la mayor superficie posible sin salirse del área cultivada, el arquitecto necesita determinar el punto exacto donde los tres bisectrices del triángulo se intersectan.`,
+        enunciadoHtml: `¿Cuál es el centro del círculo que debe calcular el arquitecto para instalar el sistema de riego inscrito en el jardín?`,
+        options: [
+          { letter: "A", text: "El baricentro, porque es el centro de gravedad del triángulo.", isCorrect: false, reason: "Error conceptual común: confunde el punto de corte de las medianas con el de las bisectrices." },
+          { letter: "B", text: "El incentro, porque corresponde al centro de la circunferencia inscrita tangente a los tres lados.", isCorrect: true, reason: "CLAVE CORRECTA: El incentro se forma por las bisectrices y es el centro de la circunferencia inscrita máxima." },
+          { letter: "C", text: "El circuncentro, porque equidista de los tres vértices del triángulo.", isCorrect: false, reason: "Distractor geométrico: el circuncentro corresponde a la circunferencia circunscrita (que rodea por fuera los vértices)." },
+          { letter: "D", text: "El ortocentro, porque es el punto donde coinciden las alturas.", isCorrect: false, reason: "Distractor terminológico: las alturas no generan circunferencias tangentes a los lados." }
+        ],
+        meta: {
+          competencia: "Argumentación y Modelación Geométrica",
+          componente: "Geométrico - Métrico",
+          afirmacion: "Valida propiedades y relaciones geométricas en figuras bidimensionales.",
+          evidencia: "Identifica puntos notables en un triángulo (incentro, circuncentro, baricentro) y su aplicación en problemas contextualizados.",
+          sesgo: "Bajo sesgo. Estímulo limpio: la situación de jardinería es familiar y no privilegia conocimientos extracurriculares."
+        }
+      },
+      10: {
+        grade: "Grado 10.°",
+        area: "Ciencias Naturales · Química e Indagación",
+        contextHtml: `En un laboratorio escolar, un grupo de estudiantes calienta 100 ml de agua destilada a nivel del mar (1 atm) y registra la temperatura cada 2 minutos hasta alcanzar la ebullición. Observan que a partir de los 100 °C, la temperatura del termómetro permanece constante a pesar de que el mechero Bunsen sigue encendido y suministrando calor a la misma intensidad.`,
+        enunciadoHtml: `¿Por qué la temperatura no continúa aumentando una vez que el agua alcanza su punto de ebullición a 1 atm de presión?`,
+        options: [
+          { letter: "A", text: "Porque el termómetro pierde sensibilidad al entrar en contacto con el vapor de agua.", isCorrect: false, reason: "Distractor instrumental: atribuye el fenómeno a una falla de medición y no a la termodinámica." },
+          { letter: "B", text: "Porque el calor suministrado se consume exclusivamente en vencer las fuerzas intermoleculares (calor latente de vaporización).", isCorrect: true, reason: "CLAVE CORRECTA: Durante el cambio de fase líquido-gas, la energía se destina a la transición de fase (entalpía de vaporización)." },
+          { letter: "C", text: "Porque el agua líquida absorbe el calor pero el vapor escapa enfriando el recipiente.", isCorrect: false, reason: "Explicación intuitiva incorrecta: confunde evaporación superficial con ebullición volumétrica." },
+          { letter: "D", text: "Porque el punto de ebullición destruye los enlaces covalentes entre el hidrógeno y el oxígeno.", isCorrect: false, reason: "Error de concepto grave: el cambio físico de fase no rompe enlaces intramoleculares covalentes." }
+        ],
+        meta: {
+          competencia: "Explicación de Fenómenos Físico-Químicos",
+          componente: "Entorno Químico / Materia",
+          afirmacion: "Explica las transformaciones de la materia a partir de modelos atómicos y moleculares.",
+          evidencia: "Diferencia entre calor sensible y calor latente durante los cambios de fase a presión constante.",
+          sesgo: "Sin sesgo cultural. Pregunta universal de laboratorio estándar en el currículo de 10°."
+        }
+      },
+      11: {
+        grade: "Grado 11.°",
+        area: "Lectura Crítica · Filosofía y Reflexión Crítica",
+        contextHtml: `<em>"Si la justicia consiste en dar a cada uno lo que se le debe, ¿debemos acaso devolver las armas que nos confió un amigo en su sano juicio cuando este, habiendo perdido la razón, viene furioso a reclamarlas? Ningún hombre sensato diría que en semejante circunstancia se le deben devolver, ni que quien lo hiciera obraría con justicia."</em> (Adaptado de Platón, <em>La República</em>).`,
+        enunciadoHtml: `¿Cuál es el propósito central del autor al plantear el caso del amigo que perdió la razón y reclama sus armas?`,
+        options: [
+          { letter: "A", text: "Demostrar que en una sociedad civilizada los ciudadanos no deberían tener permitido portar armas.", isCorrect: false, reason: "Distractor anacrónico: traslada el texto a un debate contemporáneo sobre control de armas ajeno a la tesis filosófica." },
+          { letter: "B", text: "Refutar la definición tradicional de justicia demostrando que su aplicación rígida puede conducir a actos perjudiciales.", isCorrect: true, reason: "CLAVE CORRECTA: El contraejemplo sirve como argumento por reducción al absurdo para impugnar la definición de Simónides de 'dar a cada cual lo debido'." },
+          { letter: "C", text: "Advertir a los gobernantes sobre los peligros que representan los enfermos mentales en la polis.", isCorrect: false, reason: "Distractor literal/superficial: toma el ejemplo como tema central y no como recurso argumentativo." },
+          { letter: "D", text: "Afirmar que la amistad es un valor superior a la justicia en cualquier dilema moral.", isCorrect: false, reason: "Distractor ético: el texto no jerarquiza la amistad sobre la justicia, sino que problematiza qué es la justicia." }
+        ],
+        meta: {
+          competencia: "Reflexión y Evaluación Crítica del Texto",
+          componente: "Textos Continuos Filosóficos",
+          afirmacion: "Evalúa la validez de los argumentos y las estrategias retóricas empleadas en un texto.",
+          evidencia: "Identifica la función argumentativa de un contraejemplo o caso hipotético para refutar una tesis general.",
+          sesgo: "Precaución con el sesgo léxico: el vocabulario filosófico requiere que el docente enseñe a aislar la estructura lógica del argumento sin intimidarse por el lenguaje clásico."
+        }
+      }
+    };
+
+    // DEFINICIONES PEDAGÓGICAS PARA CADA CAPA DEL VISOR RAYOS X
+    const LAYER_DEFINITIONS = {
+      all: {
+        icon: "ℹ️",
+        title: "Visión Integral del Ítem (Marco DCE)",
+        text: "En el Diseño Centrado en Evidencias (DCE), una pregunta ICFES es un instrumento psicométrico calibrado donde cada elemento cumple una función explícita para evaluar una competencia curricular específica sin sesgos."
+      },
+      context: {
+        icon: "👁️",
+        title: "Capa 1: Contexto / Estímulo Relevante ➔ Conecta con Componente Curricular",
+        text: "Es la situación cotidiana, académica o científica (texto, infografía, experimento, caso) que suministra la información necesaria. En el DCE, el contexto delimita el COMPONENTE temático (ej. Geométrico-Métrico, Entorno Físico, Filosofía)."
+      },
+      enunciado: {
+        icon: "🎯",
+        title: "Capa 2: Enunciado / Tarea Cognitiva Precisa ➔ Conecta con Competencia y Afirmación",
+        text: "Formula la pregunta o instrucción directa sin ambigüedad. Exige al estudiante movilizar una habilidad específica (Saber Qué). En el DCE, el enunciado activa la COMPETENCIA y la AFIRMACIÓN del estándar."
+      },
+      clave: {
+        icon: "🔑",
+        title: "Capa 3: Clave & Distractores Plausibles ➔ Conecta con Evidencia (Saber Cómo)",
+        text: "La CLAVE es la única opción válida que demuestra el dominio de la EVIDENCIA evaluada. Los DISTRACTORES son alternativas falsas pero atractivas que capturan errores conceptuales frecuentes o sesgos de lectura superficial."
+      },
+      sesgo: {
+        icon: "⚠️",
+        title: "Capa 4: Análisis de Sesgo del Ítem ➔ Validación de Equidad Psicométrica",
+        text: "Verifica que la pregunta no favorezca ni perjudique a estudiantes por su región, género, nivel socioeconómico o vocabulario no enseñado. Asegura que lo que se mida sea puramente la competencia evaluada."
+      }
+    };
+
+    // BASE DE CONOCIMIENTO TÉCNICO DCE (GUÍAS DE ORIENTACIÓN SABER 11 & SABER 9/10)
+    // Estructura oficial ICFES: Área -> Componentes -> Competencias -> Afirmaciones -> Evidencias
+    const DCE_FRAMEWORK = {
+      "Matemáticas": {
+        components: ["Numérico - Variacional", "Geométrico - Métrico", "Aleatorio / Estadística"],
+        competencies: {
+          "Interpretación y Representación": {
+            afirmaciones: [
+              {
+                texto: "Comprende y transforma la información cuantitativa y esquemática presentada en distintos formatos.",
+                evidencias: [
+                  "Da cuenta de las características básicas de la información presentada en diferentes formatos como series, gráficas, tablas y esquemas.",
+                  "Transforma la representación de una o más piezas de información de un formato a otro (tablas a gráficos, enunciados a expresiones algebraicas).",
+                  "Extrae y agrupa información cuantitativa relevante para resolver un problema cotidiano o científico."
+                ]
+              },
+              {
+                texto: "Valida la pertinencia y suficiencia de datos numéricos o gráficos para abordar situaciones problema.",
+                evidencias: [
+                  "Compara y relaciona datos procedentes de dos o más fuentes numéricas, tabulares o diagramáticas.",
+                  "Identifica inconsistencias, datos atípicos o información faltante en representaciones estadísticas y numéricas."
+                ]
+              }
+            ]
+          },
+          "Formulación y Ejecución": {
+            afirmaciones: [
+              {
+                texto: "Diseña planes para la solución de problemas que involucran información cuantitativa o esquemática.",
+                evidencias: [
+                  "Diseña estrategias matemáticas utilizando operaciones aritméticas, porcentajes, razones, proporciones y tasas de cambio.",
+                  "Modela matemáticamente situaciones o fenómenos utilizando funciones, expresiones algebraicas o sistemas de ecuaciones.",
+                  "Formula algoritmos y secuencias ordenadas de pasos para resolver problemas de optimización y medidas."
+                ]
+              },
+              {
+                texto: "Ejecuta planes de solución para resolver problemas con información cuantitativa o esquemática.",
+                evidencias: [
+                  "Aplica propiedades geométricas (teorema de Pitágoras, semejanza, congruencia, perímetros y áreas) en contextos métricos.",
+                  "Calcula probabilidades simples y compuestas mediante técnicas de conteo, combinatoria y diagramas de árbol.",
+                  "Resuelve operaciones algebraicas y numéricas verificando el orden operacional y la coherencia de unidades."
+                ]
+              }
+            ]
+          },
+          "Argumentación": {
+            afirmaciones: [
+              {
+                texto: "Valida procedimientos y estrategias matemáticas utilizadas para dar solución a problemas.",
+                evidencias: [
+                  "Plantea argumentos, justificaciones y contraejemplos que sustentan o refutan una conclusión o solución propuesta.",
+                  "Justifica la validez de un procedimiento o conjetura matemática con base en definiciones, teoremas y propiedades formales.",
+                  "Identifica falacias, sesgos de generalización o errores lógicos en demostraciones y reportes de datos cuantitativos."
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "Lectura Crítica": {
+        components: ["Componente Semántico", "Componente Sintáctico", "Componente Pragmático"],
+        competencies: {
+          "1. Identificar y Entender Contenidos Locales": {
+            afirmaciones: [
+              {
+                texto: "Comprende la estructura semántica y el sentido puntual de palabras, expresiones o frases locales en un texto.",
+                evidencias: [
+                  "Entiende el significado denotativo y contextual de palabras, términos técnicos o símbolos locales a partir de su entorno textual.",
+                  "Identifica los eventos narrados, personajes, datos cronológicos o enunciados explícitos en un fragmento del texto."
+                ]
+              }
+            ]
+          },
+          "2. Comprender Articulación y Sentido Global": {
+            afirmaciones: [
+              {
+                texto: "Reconoce la estructura formal del texto, la jerarquía de ideas y las relaciones lógicas y cohesivas entre sus partes.",
+                evidencias: [
+                  "Comprende la función discursiva de las partes de un texto (introducción, tesis, argumentos de apoyo, contraargumentos, conectores, conclusión).",
+                  "Identifica relaciones semánticas de causa-efecto, oposición, ejemplificación o condición entre oraciones y párrafos contiguos.",
+                  "Sintetiza y determina la idea central, la tesis directriz o el propósito global en textos continuos y discontinuos (infografías, viñetas)."
+                ]
+              }
+            ]
+          },
+          "3. Reflexionar y Evaluar el Contenido": {
+            afirmaciones: [
+              {
+                texto: "Evalúa la solidez de los argumentos, los supuestos ideológicos, las intenciones y estrategias retóricas del autor.",
+                evidencias: [
+                  "Juzga la coherencia, validez y alcance de los argumentos formulados en textos de opinión, columnas, debates o ensayos filosóficos.",
+                  "Reconoce la intención comunicativa, el tono discursivo (irónico, crítico, persuasivo) y los juicios valorativos implícitos.",
+                  "Contextualiza el texto contrastándolo con otras posturas filosóficas, históricas o problemáticas socioculturales contemporáneas."
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "Ciencias Naturales": {
+        components: ["Entorno Físico", "Entorno Químico", "Entorno Biológico / Vivo", "Ciencia, Tecnología y Sociedad (CTS)"],
+        competencies: {
+          "Uso Comprensivo del Conocimiento Científico": {
+            afirmaciones: [
+              {
+                texto: "Asocia fenómenos de la naturaleza con conceptos, principios, leyes y modelos de la física, química y biología.",
+                evidencias: [
+                  "Modela fenómenos naturales utilizando leyes científicas (conservación de energía, estequiometría, genética mendeliana, dinámica newtoniana).",
+                  "Diferencia sustancias puras, mezclas, transformaciones físicas y reacciones químicas según sus propiedades térmicas y moleculares.",
+                  "Relaciona los niveles de organización biológica (celular, tisular, orgánico, ecosistémico) con la homeostasis y adaptación."
+                ]
+              }
+            ]
+          },
+          "Explicación de Fenómenos": {
+            afirmaciones: [
+              {
+                texto: "Construye explicaciones y analiza argumentos y modelos que dan razón de fenómenos del entorno natural.",
+                evidencias: [
+                  "Explica el comportamiento de variables fisicoquímicas mediante leyes científicas y relaciones de proporcionalidad directa o inversa.",
+                  "Determina causas y consecuencias ecológicas, cinéticas o metabólicas ante perturbaciones ambientales, mutaciones o flujos energéticos.",
+                  "Establece balances de materia y energía en transformaciones termodinámicas, físicas y químicas de la vida cotidiana e industrial."
+                ]
+              }
+            ]
+          },
+          "Indagación": {
+            afirmaciones: [
+              {
+                texto: "Comprende el método investigativo y experimental para plantear y contrastar hipótesis sobre el mundo natural.",
+                evidencias: [
+                  "Diseña procedimientos experimentales, identificando variables dependientes, independientes y condiciones de control riguroso.",
+                  "Interpreta datos experimentales en tablas, curvas cinéticas o espectros de laboratorio, reconociendo fuentes de incertidumbre.",
+                  "Evalúa la validez de conclusiones científicas contrastándolas rigurosamente con los resultados empíricos obtenidos."
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "Ciencias Sociales": {
+        components: ["Ético - Político y Competencias Ciudadanas", "Historia y Cultura", "Espacio y Ambiente"],
+        competencies: {
+          "Pensamiento Social": {
+            afirmaciones: [
+              {
+                texto: "Comprende modelos conceptuales, principios constitucionales y procesos históricos y territoriales de Colombia y el mundo.",
+                evidencias: [
+                  "Conoce los principios del Estado Social de Derecho, derechos fundamentales y mecanismos de protección constitucional (tutela, veeduría).",
+                  "Identifica las características de regímenes políticos, modelos económicos y procesos de memoria y conflicto armado en Colombia.",
+                  "Reconoce relaciones espaciales, demográficas y de ordenamiento territorial en contextos urbanos y rurales."
+                ]
+              }
+            ]
+          },
+          "Interpretación y Análisis de Perspectivas": {
+            afirmaciones: [
+              {
+                texto: "Reconoce y evalúa las múltiples posturas, intereses y visiones de actores sociales en situaciones de conflicto o debate público.",
+                evidencias: [
+                  "Inscribe una propuesta, discurso o decisión comunitaria en un contexto ideológico, político o socioeconómico específico.",
+                  "Analiza causas, motivaciones y tensiones de los actores involucrados en problemáticas ciudadanas, étnicas y ambientales.",
+                  "Identifica prejuicios, argumentos falaces y sesgos en discursos políticos y debates sobre dilemas morales de actualidad."
+                ]
+              }
+            ]
+          },
+          "Pensamiento Reflexivo y Sistémico": {
+            afirmaciones: [
+              {
+                texto: "Evalúa el uso social del conocimiento, el impacto de políticas públicas y las dimensiones multidimensionales de las problemáticas.",
+                evidencias: [
+                  "Evalúa la viabilidad y efectos directos e indirectos (económicos, sociales, ecológicos) de decisiones estatales y proyectos de desarrollo.",
+                  "Establece relaciones causales entre dimensiones históricas, institucionales, culturales y económicas que inciden en una problemática social."
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "Inglés": {
+        components: [
+          "Léxico y Vocabulario (Partes 1, 2 y 7)",
+          "Gramatical y Sintáctico (Parte 4)",
+          "Pragmático y Comunicativo (Parte 3)",
+          "Comprensión Lectora (Partes 5 y 6)"
+        ],
+        competencies: {
+          "Competencia Lingüística": {
+            afirmaciones: [
+              {
+                texto: "Demuestra conocimiento léxico y estructural en lengua inglesa para resolver situaciones funcionales cotidianas (A1 a B+).",
+                evidencias: [
+                  "Asocia descripciones cortas con vocabulario común y avisos en lugares públicos (Partes 1 y 2).",
+                  "Selecciona la forma gramatical, tiempo verbal o preposición adecuada para completar párrafos contextualizados (Parte 4)."
+                ]
+              }
+            ]
+          },
+          "Competencia Pragmática y Funcional": {
+            afirmaciones: [
+              {
+                texto: "Responde de manera coherente a intercambios comunicativos y situaciones conversacionales del inglés cotidiano.",
+                evidencias: [
+                  "Identifica la intención comunicativa del interlocutor y selecciona la respuesta conversacional más pertinente y natural (Parte 3)."
+                ]
+              }
+            ]
+          },
+          "Competencia Sociolingüística y Lectora": {
+            afirmaciones: [
+              {
+                texto: "Comprende textos expositivos, narrativos e informativos de mediana complejidad extrayendo sentido explícito e implícito.",
+                evidencias: [
+                  "Identifica información puntual, cronológica y realiza inferencias directas en artículos breves (Parte 5).",
+                  "Deduce la postura, tono y propósito comunicativo del autor en textos de opinión o divulgación cultural (Parte 6).",
+                  "Integra vocabulario avanzado y estructuras complejas para restituir el sentido global de lecturas avanzadas (Parte 7)."
+                ]
+              }
+            ]
+          }
+        }
+      }
+    };
+
+    // BIBLIOTECA EXACTA DE PLANES DE MEJORAMIENTO OFICIALES POR PRUEBA, ÁREA Y COMPONENTE
+    const SHOCK_PLAN_PDFS = {
+      "saber-11-master-elite": {
+        "Matemáticas": {
+          "Geométrico - Métrico": "PM-Master Elite11-Mat-Geométrico.pdf",
+          "Numérico - Variacional": "PM-Master Elite11-Mat-Numérico-Variacional.pdf",
+          "Aleatorio / Estadística": "PM-Master Elite11-Mat-ALEATORIO.pdf"
+        },
+        "Lectura Crítica": {
+          "Componente Semántico": "PM-Master Elite 11-Lec-Sem.pdf",
+          "Componente Sintáctico": "PM-Master Elite11-Lec-Sint.pdf",
+          "Componente Pragmático": "PM-Master Elite11-Lec-Prag.pdf"
+        },
+        "Ciencias Naturales": {
+          "Entorno Físico": "PM-Master Elite 11-Nat-ENTORNO FÍSICO.pdf",
+          "Entorno Químico": "PM-Master Elite11-Nat-ENTORNO QUÍMICO.pdf",
+          "Entorno Biológico / Vivo": "PM-Master Elite11-Nat-Entorno Biológico.pdf",
+          "Ciencia, Tecnología y Sociedad (CTS)": "PM-Master Elite 11-Nat-Entorno CTS.pdf"
+        },
+        "Ciencias Sociales": {
+          "Ético - Político y Competencias Ciudadanas": "PM-Master Elite 11-Soc-Eti y Pol.pdf",
+          "Historia y Cultura": "PM-Master Elite 11-Soc-His y Cul.pdf",
+          "Espacio y Ambiente": "PM-Master Elite 11-Soc-Esp y Amb.pdf"
+        },
+        "Inglés": {
+          "Léxico y Vocabulario (Partes 1, 2 y 7)": "PM-Master Elite11-Ingles.pdf",
+          "Gramatical y Sintáctico (Parte 4)": "PM-Master Elite11-Ingles.pdf",
+          "Pragmático y Comunicativo (Parte 3)": "PM-Master Elite11-Ingles.pdf",
+          "Comprensión Lectora (Partes 5 y 6)": "PM-Master Elite11-Ingles.pdf"
+        }
+      },
+      "saber-11-kappa-premium": {
+        "Matemáticas": {
+          "Geométrico - Métrico": "PM-Kappa11-Mat-Geométrico*.pdf",
+          "Numérico - Variacional": "PM-Kappa11-Mat-Numérico-Variacional.pdf",
+          "Aleatorio / Estadística": "PM-Kappa11-Mat-ALEATORIO.pdf"
+        },
+        "Lectura Crítica": {
+          "Componente Semántico": "PM-Kappa11-Lec-Sem.pdf",
+          "Componente Sintáctico": "PM-Kappa11-Lec-Sint.pdf",
+          "Componente Pragmático": "PM-Kappa11-Lec-Prag.pdf"
+        },
+        "Ciencias Naturales": {
+          "Entorno Físico": "PM-Kappa11-Nat-ENTORNO FÍSICO.pdf",
+          "Entorno Químico": "PM-Kappa11-Nat-ENTORNO QUÍMICO.pdf",
+          "Entorno Biológico / Vivo": "PM-Kappa11-Nat-Entorno Biológico.pdf",
+          "Ciencia, Tecnología y Sociedad (CTS)": "PM-Kappa11-Nat-Entorno CTS.pdf"
+        },
+        "Ciencias Sociales": {
+          "Ético - Político y Competencias Ciudadanas": "PM-Kappa11-Soc-Comp Ciud.pdf",
+          "Historia y Cultura": "PM-Kappa11-Soc-His y Cul.pdf",
+          "Espacio y Ambiente": "PM-Kappa11-Soc-Esp y Amb.pdf"
+        },
+        "Inglés": {
+          "Léxico y Vocabulario (Partes 1, 2 y 7)": "PM-Kappa11-Ingles.pdf",
+          "Gramatical y Sintáctico (Parte 4)": "PM-Kappa11-Ingles.pdf",
+          "Pragmático y Comunicativo (Parte 3)": "PM-Kappa11-Ingles.pdf",
+          "Comprensión Lectora (Partes 5 y 6)": "PM-Kappa11-Ingles.pdf"
+        }
+      },
+      "saber-11-epsilon": {
+        "Matemáticas": {
+          "Numérico - Variacional": "PM-Epsilon11-Mat-Numérico-Variacional.pdf",
+          "Geométrico - Métrico": "PM-Epsilon11-Mat-Geométrico.pdf",
+          "Aleatorio / Estadística": "PM-Epsilon11-Mat-ALEATORIO.pdf"
+        },
+        "Lectura Crítica": {
+          "Componente Semántico": "PM-Epsilon 11-Lec-Sem.pdf",
+          "Componente Sintáctico": "PM-Epsilon11-Lec-Sint.pdf",
+          "Componente Pragmático": "PM-Epsilon11-Lec-Prag.pdf"
+        },
+        "Ciencias Naturales": {
+          "Entorno Físico": "PM-Epsilon11-Nat-ENTORNO FÍSICO.pdf",
+          "Entorno Químico": "PM-Epsilon11-Nat-ENTORNO QUÍMICO.pdf",
+          "Entorno Biológico / Vivo": "PM-Epsilon11-Nat-Entorno Biológico.pdf",
+          "Ciencia, Tecnología y Sociedad (CTS)": "PM-Epsilon11-Nat-Entorno CTS.pdf"
+        },
+        "Ciencias Sociales": {
+          "Ético - Político y Competencias Ciudadanas": "PM-Epsilon11-Soc-Eti y Pol.pdf",
+          "Historia y Cultura": "PM-Epsilon11-Soc-His y Cul.pdf",
+          "Espacio y Ambiente": "PM-Epsilon11-Soc-Esp y Amb.pdf"
+        },
+        "Inglés": {
+          "Léxico y Vocabulario (Partes 1, 2 y 7)": "PM-Epsilon11-Ingles.pdf",
+          "Gramatical y Sintáctico (Parte 4)": "PM-Epsilon11-Ingles.pdf",
+          "Pragmático y Comunicativo (Parte 3)": "PM-Epsilon11-Ingles.pdf",
+          "Comprensión Lectora (Partes 5 y 6)": "PM-Epsilon11-Ingles.pdf"
+        }
+      },
+      "saber-11-sigma": {
+        "Matemáticas": {
+          "Numérico - Variacional": "PM-Sigma 11-Mat-Numerico*.pdf",
+          "Geométrico - Métrico": "PM-Sigma 11-Mat-Geometrico*.pdf",
+          "Aleatorio / Estadística": "PM-Sigma 11-Mat-Aleatorio*.pdf"
+        },
+        "Lectura Crítica": {
+          "Componente Semántico": "PM-Sigma 11-Lec-Semantico.pdf",
+          "Componente Sintáctico": "PM-Sigma 11-Lec-Sintactico.pdf",
+          "Componente Pragmático": "PM-Sigma 11-Lec-Pragmatico.pdf"
+        },
+        "Ciencias Naturales": {
+          "Entorno Físico": "PM-Sigma11-Nat-Entorno fisico.pdf",
+          "Entorno Químico": "PM-Sigma11-Nat-Entorno quimico.pdf",
+          "Entorno Biológico / Vivo": "PM-Sigma11-Nat-Entorno biologico.pdf",
+          "Ciencia, Tecnología y Sociedad (CTS)": "PM-Sigma11-Nat-Ciencia, tecn y soci.pdf"
+        },
+        "Ciencias Sociales": {
+          "Ético - Político y Competencias Ciudadanas": "PM-Sigma11-Soc-Etico-politico.pdf",
+          "Historia y Cultura": "PM-Sigma11-Soc-Historia y Cultura.pdf",
+          "Espacio y Ambiente": "PM-Sigma11-Espacio-ambiente.pdf"
+        },
+        "Inglés": {
+          "Léxico y Vocabulario (Partes 1, 2 y 7)": "PM-Sigma 11-Ingles.pdf",
+          "Gramatical y Sintáctico (Parte 4)": "PM-Sigma 11-Ingles.pdf",
+          "Pragmático y Comunicativo (Parte 3)": "PM-Sigma 11-Ingles.pdf",
+          "Comprensión Lectora (Partes 5 y 6)": "PM-Sigma 11-Ingles.pdf"
+        }
+      },
+      "saber-10-dzeta": {
+        "Matemáticas": {
+          "Numérico - Variacional": "PM-Dzeta 10-Mat-Numérico-Variacional.pdf",
+          "Geométrico - Métrico": "PM-Dzeta 10-Mat-Geométrico.pdf",
+          "Aleatorio / Estadística": "PM-Dzeta 10-Mat-ALEATORIO.pdf"
+        },
+        "Lectura Crítica": {
+          "Componente Semántico": "PM-Dzeta 10-Lec-Semántico.pdf",
+          "Componente Sintáctico": "PM-Dzeta 10-Lec-Sintáctico.pdf",
+          "Componente Pragmático": "PM-Dzeta 10-Lec-Pragmático.pdf"
+        },
+        "Ciencias Naturales": {
+          "Entorno Físico": "PM-Dzeta 10-Nat-Entorno Físico.pdf",
+          "Entorno Químico": "PM-Dzeta 10-Nat-Entorno Químico.pdf",
+          "Entorno Biológico / Vivo": "PM-Dzeta 10-Nat-Entorno Biológico.pdf",
+          "Ciencia, Tecnología y Sociedad (CTS)": "PM-Dzeta 10-Nat-CTS.pdf"
+        },
+        "Ciencias Sociales": {
+          "Ético - Político y Competencias Ciudadanas": "PM-Dzeta 10-Soc-Ético-Político.pdf",
+          "Historia y Cultura": "PM-Dzeta 10-Soc-Historia y Cultura.pdf",
+          "Espacio y Ambiente": "PM-Dzeta 10-Soc-Espacio y Ambiente.pdf"
+        },
+        "Inglés": {
+          "Léxico y Vocabulario (Partes 1, 2 y 7)": "PM-Dzeta 10-Inglés.pdf",
+          "Gramatical y Sintáctico (Parte 4)": "PM-Dzeta 10-Inglés.pdf",
+          "Pragmático y Comunicativo (Parte 3)": "PM-Dzeta 10-Inglés.pdf",
+          "Comprensión Lectora (Partes 5 y 6)": "PM-Dzeta 10-Inglés.pdf"
+        }
+      },
+      "saber-10-sigma": {
+        "Matemáticas": {
+          "Numérico - Variacional": "PM-Sigma 10-Mat-Numerico*.pdf",
+          "Geométrico - Métrico": "PM-Sigma 10-Mat-Geometrico*.pdf",
+          "Aleatorio / Estadística": "PM-Sigma 10-Mat-Aleatorio*.pdf"
+        },
+        "Lectura Crítica": {
+          "Componente Semántico": "PM-Sigma 10-Lec-Semantico.pdf",
+          "Componente Sintáctico": "PM-Sigma 10-Lec-Sintactico.pdf",
+          "Componente Pragmático": "PM-Sigma 10-Lec-Pragmatico.pdf"
+        },
+        "Ciencias Naturales": {
+          "Entorno Físico": "PM-Sigma10-Nat-Entorno fisico.pdf",
+          "Entorno Químico": "PM-Sigma10-Nat-Entorno quimico.pdf",
+          "Entorno Biológico / Vivo": "PM-Sigma10-Nat-Entorno biologico.pdf",
+          "Ciencia, Tecnología y Sociedad (CTS)": "PM-Sigma10-Nat-Ciencia, tecnologia y sociedad.pdf"
+        },
+        "Ciencias Sociales": {
+          "Ético - Político y Competencias Ciudadanas": "PM-Sigma10-Soc-Etico-politico.pdf",
+          "Historia y Cultura": "PM-Sigma10-Soc-Historia y Cultura.pdf",
+          "Espacio y Ambiente": "PM-Sigma10-Espacio-ambiente.pdf"
+        },
+        "Inglés": {
+          "Léxico y Vocabulario (Partes 1, 2 y 7)": "PM-Sigma 10-Ingles.pdf",
+          "Gramatical y Sintáctico (Parte 4)": "PM-Sigma 10-Ingles.pdf",
+          "Pragmático y Comunicativo (Parte 3)": "PM-Sigma 10-Ingles.pdf",
+          "Comprensión Lectora (Partes 5 y 6)": "PM-Sigma 10-Ingles.pdf"
+        }
+      },
+      "saber-10-epsilon": {
+        "Matemáticas": {
+          "Numérico - Variacional": "PM-Epsilon 10-Mat-Num.pdf",
+          "Geométrico - Métrico": "PM-Epsilon 10-Mat-Geo.pdf",
+          "Aleatorio / Estadística": "PM-Epsilon 10-Mat-Ale.pdf"
+        },
+        "Lectura Crítica": {
+          "Componente Semántico": "PM-Epsilon 10-Lec-Sem.pdf",
+          "Componente Sintáctico": "PM-Epsilon 10-Lec-Sin.pdf",
+          "Componente Pragmático": "PM-Epsilon 10-Lec-Prag.pdf"
+        },
+        "Ciencias Naturales": {
+          "Entorno Físico": "PM-Epsilon 10-Nat-Fis.pdf",
+          "Entorno Químico": "PM-Epsilon 10-Nat-Qui.pdf",
+          "Entorno Biológico / Vivo": "PM-Epsilon 10-Nat-Bio.pdf",
+          "Ciencia, Tecnología y Sociedad (CTS)": "PM-Epsilon 10-Nat-Cts.pdf"
+        },
+        "Ciencias Sociales": {
+          "Ético - Político y Competencias Ciudadanas": "PM-Epsilon 10-Soc-comp.pdf",
+          "Historia y Cultura": "PM-Epsilon 10-Soc-Soc.pdf",
+          "Espacio y Ambiente": "PM-Epsilon 10-Soc-Soc.pdf"
+        },
+        "Inglés": {
+          "Léxico y Vocabulario (Partes 1, 2 y 7)": "PM-Epsilon 10-Ing-Lex Parte 1.pdf",
+          "Gramatical y Sintáctico (Parte 4)": "PM-Epsilon 10-Ing-grama Parte 4.pdf",
+          "Pragmático y Comunicativo (Parte 3)": "PM-Epsilon 10-Ing-comu Parte 3.pdf",
+          "Comprensión Lectora (Partes 5 y 6)": "PM-Epsilon 10-Ing-lec-lit Parte 5.pdf"
+        }
+      },
+      "saber-10-kappa": {
+        "Matemáticas": {
+          "Geométrico - Métrico": "PM-Kappa 10-Mat-Geométrico.pdf",
+          "Numérico - Variacional": "PM-Kappa 10-Mat-Numérico-Variacional.pdf",
+          "Aleatorio / Estadística": "PM-Kappa 10-Mat-ALEATORIO.pdf"
+        },
+        "Lectura Crítica": {
+          "Componente Semántico": "PM-Kappa 10-Lec-Sem.pdf",
+          "Componente Sintáctico": "PM-Kappa 10-Lec-Sint.pdf",
+          "Componente Pragmático": "PM-Kappa 10-Lec-Prag.pdf"
+        },
+        "Ciencias Naturales": {
+          "Entorno Físico": "PM-Kappa 10-Nat-ENTORNO FÍSICO.pdf",
+          "Entorno Químico": "PM-Kappa 10-Nat-ENTORNO QUÍMICO.pdf",
+          "Entorno Biológico / Vivo": "PM-Kappa 10-Nat-Entorno Biológico.pdf",
+          "Ciencia, Tecnología y Sociedad (CTS)": "PM-Kappa 10-Nat-Entorno CTS.pdf"
+        },
+        "Ciencias Sociales": {
+          "Ético - Político y Competencias Ciudadanas": "PM-Kappa 10-Ético-Político.pdf",
+          "Historia y Cultura": "PM-Kappa 10-Soc-His y Cul.pdf",
+          "Espacio y Ambiente": "PM-Kappa 10-Espacio y Ambiente.pdf"
+        },
+        "Inglés": {
+          "Léxico y Vocabulario (Partes 1, 2 y 7)": "PM-Kappa 10-Ingles.pdf",
+          "Gramatical y Sintáctico (Parte 4)": "PM-Kappa 10-Ingles.pdf",
+          "Pragmático y Comunicativo (Parte 3)": "PM-Kappa 10-Ingles.pdf",
+          "Comprensión Lectora (Partes 5 y 6)": "PM-Kappa 10-Ingles.pdf"
+        }
+      },
+      "saber-10-master-elite": {
+        "Matemáticas": {
+          "Geométrico - Métrico": "PM-MasterElite10-Mat-Geométrico.pdf",
+          "Numérico - Variacional": "PM-MasterElite10-Mat-Numérico.pdf",
+          "Aleatorio / Estadística": "PM-MasterElite10-Mat-Aleatorio.pdf"
+        },
+        "Lectura Crítica": {
+          "Componente Semántico": "PM-MasterElite10-Lec-Semántico.pdf",
+          "Componente Sintáctico": "PM-MasterElite10-Lec-Sintáctico.pdf",
+          "Componente Pragmático": "PM-MasterElite10-Lec-Pragmático.pdf"
+        },
+        "Ciencias Naturales": {
+          "Entorno Físico": "PM-MasterElite10-Nat-Entorno Físico.pdf",
+          "Entorno Químico": "PM-MasterElite10-Nat-Entorno Químico.pdf",
+          "Entorno Biológico / Vivo": "PM-MasterElite10-Nat-Entorno Biológico.pdf",
+          "Ciencia, Tecnología y Sociedad (CTS)": "PM-MasterElite10-Nat-CTS.pdf"
+        },
+        "Ciencias Sociales": {
+          "Ético - Político y Competencias Ciudadanas": "PM-MasterElite10-Soc-Ético-Político.pdf",
+          "Historia y Cultura": "PM-MasterElite10-Soc-Historia y Cultura.pdf",
+          "Espacio y Ambiente": "PM-MasterElite10-Soc-Espacio y Ambiente.pdf"
+        },
+        "Inglés": {
+          "Léxico y Vocabulario (Partes 1, 2 y 7)": "PM-MasterElite10-Inglés.pdf",
+          "Gramatical y Sintáctico (Parte 4)": "PM-MasterElite10-Inglés.pdf",
+          "Pragmático y Comunicativo (Parte 3)": "PM-MasterElite10-Inglés.pdf",
+          "Comprensión Lectora (Partes 5 y 6)": "PM-MasterElite10-Inglés.pdf"
+        }
+      },
+      "saber-9-master-elite": {
+        "Matemáticas": {
+          "Geométrico - Métrico": "PM-MasterElite09-Mat-Geométrico.pdf",
+          "Numérico - Variacional": "PM-MasterElite09-Mat-Numérico.pdf",
+          "Aleatorio / Estadística": "PM-MasterElite09-Mat-Aleatorio.pdf"
+        },
+        "Lectura Crítica": {
+          "Componente Semántico": "PM-MasterElite09-Lec-Semántico.pdf",
+          "Componente Sintáctico": "PM-MasterElite09-Lec-Sintáctico.pdf",
+          "Componente Pragmático": "PM-MasterElite09-Lec-Pragmático.pdf"
+        },
+        "Ciencias Naturales": {
+          "Entorno Físico": "PM-MasterElite09-Nat-Entorno Físico.pdf",
+          "Entorno Químico": "PM-MasterElite09-Nat-Entorno Químico.pdf",
+          "Entorno Biológico / Vivo": "PM-MasterElite09-Nat-Entorno Biológico.pdf",
+          "Ciencia, Tecnología y Sociedad (CTS)": "PM-MasterElite09-Nat-CTS.pdf"
+        },
+        "Ciencias Sociales": {
+          "Ético - Político y Competencias Ciudadanas": "PM-MasterElite09-Soc-Ético-Político.pdf",
+          "Historia y Cultura": "PM-MasterElite09-Soc-Historia y Cultura.pdf",
+          "Espacio y Ambiente": "PM-MasterElite09-Soc-Espacio y Ambiente.pdf"
+        },
+        "Inglés": {
+          "Léxico y Vocabulario (Partes 1, 2 y 7)": "PM-MasterElite09-Inglés.pdf",
+          "Gramatical y Sintáctico (Parte 4)": "PM-MasterElite09-Inglés.pdf",
+          "Pragmático y Comunicativo (Parte 3)": "PM-MasterElite09-Inglés.pdf",
+          "Comprensión Lectora (Partes 5 y 6)": "PM-MasterElite09-Inglés.pdf"
+        }
+      }
+    };
+
+    // ESTADO GLOBAL DE LA APLICACIÓN
+    let currentMode = 'dashboard'; // 'dashboard' | 'presentation'
+    let currentSlide = 0;
+    const totalSlides = 6;
+    let currentXRayGrade = 11;
+    let activeLayer = 'all';
+
+    // RENDER INICIAL
+    document.addEventListener('DOMContentLoaded', () => {
+      showAreaMatrix('mat');
+      loadXRayExample(11);
+      // Inicializar el flujo reactivo del generador de planes de choque
+      onAreaChange();
+    });
+
+    // CONTROL DE MODO PRESENTACIÓN vs DASHBOARD
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('btn-mode-dashboard').classList.toggle('active', mode === 'dashboard');
+      document.getElementById('btn-mode-presentation').classList.toggle('active', mode === 'presentation');
+      document.getElementById('pres-nav-controls').classList.toggle('show', mode === 'presentation');
+
+      const navBar = document.getElementById('module-nav-bar');
+
+      if (mode === 'presentation') {
+        navBar.style.display = 'none';
+        currentSlide = 0;
+        showSlide(currentSlide);
+      } else {
+        navBar.style.display = 'block';
+        for (let i = 0; i < totalSlides; i++) {
+          const mod = document.getElementById(`mod-${i}`);
+          if (mod) mod.style.display = 'flex';
+        }
+      }
+    }
+
+    function showSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= totalSlides) index = totalSlides - 1;
+      currentSlide = index;
+
+      for (let i = 0; i < totalSlides; i++) {
+        const mod = document.getElementById(`mod-${i}`);
+        if (mod) {
+          mod.style.display = (i === currentSlide) ? 'flex' : 'none';
+        }
+      }
+
+      document.getElementById('pres-slide-num').textContent = `${currentSlide + 1} / ${totalSlides}`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextSlide() {
+      if (currentMode === 'presentation' && currentSlide < totalSlides - 1) {
+        showSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentMode === 'presentation' && currentSlide > 0) {
+        showSlide(currentSlide - 1);
+      }
+    }
+
+    // NAVEGACIÓN POR TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (currentMode === 'presentation') {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          e.preventDefault();
+          nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          prevSlide();
+        } else if (e.key === 'Escape') {
+          setMode('dashboard');
+        }
+      }
+    });
+
+    function jumpToModule(index) {
+      if (currentMode === 'presentation') {
+        showSlide(index);
+        return;
+      }
+      document.querySelectorAll('.module-tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === index);
+      });
+      const target = document.getElementById(`mod-${index}`);
+      if (target) {
+        const yOffset = -120;
+        const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }
+
+    // GESTIÓN DE DIFICULTAD POR PRUEBA Y ÁREA
+    function changeTestDifficulty(testKey) {
+      currentSelectedTestKey = testKey;
+      showAreaMatrix(currentSelectedAreaKey);
+    }
+
+    function showAreaMatrix(areaKey) {
+      currentSelectedAreaKey = areaKey;
+      const data = MATRIX_DATA[areaKey];
+      if (!data) return;
+
+      document.querySelectorAll('.area-btn').forEach(b => {
+        b.classList.toggle('active', b.onclick.toString().includes(areaKey));
+      });
+
+      const profile = TEST_DIFFICULTY_PROFILES[currentSelectedTestKey] || TEST_DIFFICULTY_PROFILES.all;
+      const diff = profile[areaKey] || data.difficulty;
+
+      const container = document.getElementById('matrix-display-card');
+
+      let compHtml = '';
+      data.competencies.forEach(c => {
+        compHtml += `
+          <div class="prog-item">
+            <div class="prog-header">
+              <span>${c.name}</span>
+              <span style="color: var(--blue); font-family: 'JetBrains Mono', monospace;">${c.pct}% (${c.items})</span>
+            </div>
+            <div class="prog-bar-bg">
+              <div class="prog-fill" style="width: ${c.pct}%;"></div>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--muted); margin-top: 3px;">${c.desc}</p>
+          </div>
+        `;
+      });
+
+      let compoHtml = '';
+      data.components.forEach(cp => {
+        compoHtml += `
+          <div class="prog-item">
+            <div class="prog-header">
+              <span>${cp.name}</span>
+              <span style="color: var(--cyan); font-family: 'JetBrains Mono', monospace;">${cp.pct}%</span>
+            </div>
+            <div class="prog-bar-bg">
+              <div class="prog-fill" style="width: ${cp.pct}%; background: linear-gradient(90deg, #13a2f2, #38bdf8);"></div>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--muted); margin-top: 3px;">${cp.desc}</p>
+          </div>
+        `;
+      });
+
+      container.innerHTML = `
+        <div class="matrix-col">
+          <h4>
+            <span style="color: var(--blue);">●</span>
+            Competencias Nucleares Evaluadas (${data.title.split('(')[0].trim()})
+          </h4>
+          ${compHtml}
+        </div>
+
+        <div class="matrix-col">
+          <h4>
+            <span style="color: var(--cyan);">●</span>
+            Componentes Curriculares & Dificultad Calibrada
+          </h4>
+          ${compoHtml}
+
+          <div style="margin-top: 22px; padding: 16px; border-radius: var(--radius-md); background: var(--paper); border: 1px solid var(--line);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: var(--ink);">
+                Distribución Psicométrica: ${profile.name}
+              </span>
+              <span style="font-size: 0.72rem; font-weight: 700; background: var(--blue-subtle); color: var(--blue); padding: 2px 8px; border-radius: 9999px;">
+                ${areaKey.toUpperCase()}
+              </span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <div style="flex: ${diff.low}; background: var(--emerald-subtle); border: 1.5px solid rgba(16,185,129,0.4); border-radius: 8px; padding: 10px 8px; text-align: center;">
+                <div style="font-size: 1.15rem; font-weight: 800; color: #065f46; font-family: 'JetBrains Mono';">${diff.low}%</div>
+                <div style="font-size: 0.7rem; font-weight: 800; color: #047857; text-transform: uppercase;">Dificultad Baja</div>
+              </div>
+              <div style="flex: ${diff.med}; background: var(--amber-subtle); border: 1.5px solid rgba(245,158,11,0.4); border-radius: 8px; padding: 10px 8px; text-align: center;">
+                <div style="font-size: 1.15rem; font-weight: 800; color: #b45309; font-family: 'JetBrains Mono';">${diff.med}%</div>
+                <div style="font-size: 0.7rem; font-weight: 800; color: #92400e; text-transform: uppercase;">Dificultad Media</div>
+              </div>
+              <div style="flex: ${diff.high}; background: var(--rose-subtle); border: 1.5px solid rgba(244,63,94,0.4); border-radius: 8px; padding: 10px 8px; text-align: center;">
+                <div style="font-size: 1.15rem; font-weight: 800; color: #be123c; font-family: 'JetBrains Mono';">${diff.high}%</div>
+                <div style="font-size: 0.7rem; font-weight: 800; color: #9f1239; text-transform: uppercase;">Dificultad Alta</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // VISOR RAYOS X (ANATOMÍA DE PREGUNTA CON DEFINICIONES Y CONECTORES)
+    function loadXRayExample(grade) {
+      currentXRayGrade = grade;
+      document.querySelectorAll('.grade-chip-btn').forEach(b => {
+        b.classList.toggle('active', b.onclick.toString().includes(grade));
+      });
+      renderXRayBody();
+    }
+
+    function toggleLayer(layer) {
+      activeLayer = layer;
+      document.querySelectorAll('.layer-btn').forEach(b => {
+        b.classList.toggle('active', b.id === `btn-layer-${layer}`);
+      });
+      renderXRayBody();
+    }
+
+    function renderXRayBody() {
+      const ex = XRAY_EXAMPLES[currentXRayGrade];
+      if (!ex) return;
+
+      const def = LAYER_DEFINITIONS[activeLayer] || LAYER_DEFINITIONS.all;
+      document.getElementById('def-badge-icon').textContent = def.icon;
+      document.getElementById('def-title').textContent = def.title;
+      document.getElementById('def-text').textContent = def.text;
+
+      const qPane = document.getElementById('xray-question-pane');
+      const mPane = document.getElementById('xray-meta-pane');
+
+      const isAll = activeLayer === 'all';
+      const isCtx = activeLayer === 'context' || isAll;
+      const isEnun = activeLayer === 'enunciado' || isAll;
+      const isClave = activeLayer === 'clave' || isAll;
+      const isSesgo = activeLayer === 'sesgo';
+
+      let optionsHtml = '';
+      ex.options.forEach(opt => {
+        let optClass = 'option-item';
+        let detailHtml = '';
+
+        if (isClave) {
+          if (opt.isCorrect) {
+            optClass += ' highlight-clave';
+            detailHtml = `<div style="font-size: 0.78rem; font-weight: 700; color: #047857; margin-top: 4px;">✔ ${opt.reason}</div>`;
+          } else {
+            optClass += ' highlight-distractor';
+            detailHtml = `<div style="font-size: 0.78rem; color: #9f1239; margin-top: 4px;">✖ ${opt.reason}</div>`;
+          }
+        }
+
+        optionsHtml += `
+          <div class="${optClass}">
+            <div class="option-letter" style="${opt.isCorrect && isClave ? 'background: #10b981; color: white; border-color: #10b981;' : ''}">${opt.letter}</div>
+            <div style="flex: 1;">
+              <div>${opt.text}</div>
+              ${detailHtml}
+            </div>
+          </div>
+        `;
+      });
+
+      qPane.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 10px;">
+          <span style="font-size: 0.76rem; font-weight: 800; background: var(--blue-subtle); color: var(--blue); padding: 4px 12px; border-radius: 9999px;">
+            ${ex.grade} · ${ex.area}
+          </span>
+          <span style="font-size: 0.74rem; color: var(--muted); font-family: 'JetBrains Mono';">Especificación Técnica DCE</span>
+        </div>
+
+        <!-- 1. Contexto -->
+        <div class="question-block block-context ${isCtx ? 'highlight-context' : ''}">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 0.72rem; font-weight: 800; color: var(--emerald); text-transform: uppercase;">
+              ${isCtx ? '👁️ [CAPA 1: CONTEXTO / ESTÍMULO FORMAL]' : 'Contexto'}
+            </span>
+            <span class="dce-connector-pill connector-context">
+              🔗 Conecta con: Componente Curricular ➔
+            </span>
+          </div>
+          <div>${ex.contextHtml}</div>
+        </div>
+
+        <!-- 2. Enunciado -->
+        <div class="question-block block-enunciado ${isEnun ? 'highlight-enunciado' : ''}">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 0.72rem; font-weight: 800; color: var(--blue); text-transform: uppercase;">
+              ${isEnun ? '🎯 [CAPA 2: ENUNCIADO / TAREA COGNITIVA]' : 'Enunciado'}
+            </span>
+            <span class="dce-connector-pill connector-enunciado">
+              🔗 Conecta con: Competencia & Afirmación ➔
+            </span>
+          </div>
+          <div style="font-weight: 700; color: var(--ink);">${ex.enunciadoHtml}</div>
+        </div>
+
+        <!-- 3. Opciones -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 0.72rem; font-weight: 800; color: var(--muted); text-transform: uppercase;">
+              ${isClave ? '🔑 [CAPA 3: CLAVE VS DISTRACTORES PLAUSIBLES]' : 'Opciones de Respuesta'}
+            </span>
+            <span class="dce-connector-pill connector-clave">
+              🔗 Conecta con: Evidencia (Saber Cómo) ➔
+            </span>
+          </div>
+          <div class="block-options">
+            ${optionsHtml}
+          </div>
+        </div>
+      `;
+
+      // Panel lateral de metadatos DCE con Iluminación Reactiva
+      const glowComp = (activeLayer === 'enunciado');
+      const glowElem = (activeLayer === 'context');
+      const glowAfir = (activeLayer === 'enunciado');
+      const glowEvid = (activeLayer === 'clave');
+
+      mPane.innerHTML = `
+        <div style="border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 12px; margin-bottom: 4px;">
+          <div style="font-size: 0.72rem; font-weight: 800; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.06em;">
+            Diseño Centrado en Evidencias (DCE)
+          </div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">Ficha Psicométrica del Ítem</div>
+        </div>
+
+        <div class="meta-card ${glowElem ? 'meta-glow-active' : ''}">
+          <div class="meta-card-label">
+            <span>1. Componente Curricular</span>
+            ${glowElem ? '<span style="color: #34d399; font-size: 0.68rem;">[Alimentado por el Contexto]</span>' : ''}
+          </div>
+          <div class="meta-card-val">${ex.meta.componente}</div>
+        </div>
+
+        <div class="meta-card ${glowComp ? 'meta-glow-active' : ''}">
+          <div class="meta-card-label">
+            <span>2. Competencia Evaluada</span>
+            ${glowComp ? '<span style="color: var(--cyan); font-size: 0.68rem;">[Alimentada por el Enunciado]</span>' : ''}
+          </div>
+          <div class="meta-card-val">${ex.meta.competencia}</div>
+        </div>
+
+        <div class="meta-card ${glowAfir ? 'meta-glow-active' : ''}">
+          <div class="meta-card-label">
+            <span>3. Afirmación (Saber Qué)</span>
+            ${glowAfir ? '<span style="color: var(--cyan); font-size: 0.68rem;">[Alimentada por el Enunciado]</span>' : ''}
+          </div>
+          <div class="meta-card-val">${ex.meta.afirmacion}</div>
+        </div>
+
+        <div class="meta-card ${glowEvid ? 'meta-glow-active' : ''}">
+          <div class="meta-card-label">
+            <span>4. Evidencia (Saber Cómo)</span>
+            ${glowEvid ? '<span style="color: #c084fc; font-size: 0.68rem;">[Validada por la Clave]</span>' : ''}
+          </div>
+          <div class="meta-card-val">${ex.meta.evidencia}</div>
+        </div>
+
+        <div class="meta-card ${isSesgo ? 'meta-glow-active' : ''}" style="border-color: ${isSesgo ? 'var(--rose)' : 'rgba(255,255,255,0.2)'}; background: ${isSesgo ? 'rgba(244,63,94,0.18)' : 'rgba(255,255,255,0.06)'};">
+          <div class="meta-card-label" style="color: ${isSesgo ? '#fb7185' : 'var(--cyan)'};">
+            <span>5. Análisis de Sesgo del Ítem</span>
+            ${isSesgo ? '<span style="color: #fb7185; font-size: 0.68rem;">[Alerta Activa]</span>' : ''}
+          </div>
+          <div class="meta-card-val" style="font-size: 0.82rem; font-weight: 500;">
+            ${ex.meta.sesgo}
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================================================
+    // LÓGICA DEL GENERADOR DE PLANES DE CHOQUE CON DCE Y GUÍAS DE ORIENTACIÓN
+    // ==========================================================================
+
+    // 1. Cambio de Área: Repuebla el dropdown de Componentes y el de Competencias
+    function onAreaChange() {
+      const area = document.getElementById('sp-area').value;
+      const framework = DCE_FRAMEWORK[area];
+      if (!framework) return;
+
+      // Actualizar select de Componentes
+      const compSelect = document.getElementById('sp-componente');
+      compSelect.innerHTML = '';
+      framework.components.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        compSelect.appendChild(opt);
+      });
+
+      // Actualizar select de Competencias
+      const compEvalSelect = document.getElementById('sp-competencia');
+      compEvalSelect.innerHTML = '';
+      const compKeys = Object.keys(framework.competencies);
+      compKeys.forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = k;
+        compEvalSelect.appendChild(opt);
+      });
+
+      // Desencadenar actualización de afirmaciones y evidencias según la Guía de Orientación Saber 11
+      onCompetenciaChange();
+    }
+
+    // 2. Cambio de Competencia: Repuebla las Afirmaciones oficiales asociadas a esta competencia
+    function onCompetenciaChange() {
+      const area = document.getElementById('sp-area').value;
+      const comp = document.getElementById('sp-competencia').value;
+      const framework = DCE_FRAMEWORK[area];
+      if (!framework || !framework.competencies[comp]) return;
+
+      const compData = framework.competencies[comp];
+      const afirSelect = document.getElementById('sp-afirmacion');
+      afirSelect.innerHTML = '';
+      
+      compData.afirmaciones.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.texto;
+        opt.textContent = item.texto;
+        afirSelect.appendChild(opt);
+      });
+
+      // Desencadenar actualización de evidencias asociadas
+      onAfirmacionChange();
+    }
+
+    // 3. Cambio de Afirmación: Repuebla las Evidencias oficiales asociadas a la afirmación seleccionada
+    function onAfirmacionChange() {
+      const area = document.getElementById('sp-area').value;
+      const comp = document.getElementById('sp-competencia').value;
+      const afirText = document.getElementById('sp-afirmacion').value;
+      const framework = DCE_FRAMEWORK[area];
+      if (!framework || !framework.competencies[comp]) return;
+
+      const compData = framework.competencies[comp];
+      const targetAfir = compData.afirmaciones.find(a => a.texto === afirText) || compData.afirmaciones[0];
+
+      const evidSelect = document.getElementById('sp-evidencia');
+      evidSelect.innerHTML = '';
+      if (targetAfir && targetAfir.evidencias) {
+        targetAfir.evidencias.forEach(ev => {
+          const opt = document.createElement('option');
+          opt.value = ev;
+          opt.textContent = ev;
+          evidSelect.appendChild(opt);
+        });
+      }
+
+      updateDCEAndPDF();
+    }
+
+    // 4. Cambio de Evidencia
+    function onEvidenciaChange() {
+      updateDCEAndPDF();
+    }
+
+    // 5. Cambio de Componente
+    function onComponenteChange() {
+      updateDCEAndPDF();
+    }
+
+    // 6. Cambio de Prueba
+    function onTestOrAreaChange() {
+      updateDCEAndPDF();
+    }
+
+    // 7. Función Central: Sincroniza Plan de Mejoramiento PDF oficial según Prueba, Área y Componente
+    function updateDCEAndPDF() {
+      const test = document.getElementById('sp-simulacro').value;
+      const area = document.getElementById('sp-area').value;
+      const componente = document.getElementById('sp-componente').value;
+
+      // Asignar el Plan de Mejoramiento PDF oficial según Prueba, Área y Componente
+      let assignedPDF = "Plan de Mejoramiento Oficial - Grupo Edúcate Colombia.pdf";
+      const testPdfs = SHOCK_PLAN_PDFS[test];
+      if (testPdfs && testPdfs[area] && testPdfs[area][componente]) {
+        assignedPDF = testPdfs[area][componente];
+      } else if (testPdfs && testPdfs[area]) {
+        const firstKey = Object.keys(testPdfs[area])[0];
+        if (firstKey) assignedPDF = testPdfs[area][firstKey];
+      }
+
+      document.getElementById('sp-pm').value = assignedPDF;
+    }
+
+    // IMPRESIÓN / GUARDADO DE FICHA OFICIAL DE PLAN DE CHOQUE
+    function exportShockPlan() {
+      const simulacroText = document.getElementById('sp-simulacro').options[document.getElementById('sp-simulacro').selectedIndex].text;
+      const area = document.getElementById('sp-area').value;
+      const componente = document.getElementById('sp-componente').value;
+      const competencia = document.getElementById('sp-competencia').value;
+      const afirmacion = document.getElementById('sp-afirmacion').value;
+      const evidencia = document.getElementById('sp-evidencia').value;
+      const pm = document.getElementById('sp-pm').value;
+      const docente = document.getElementById('sp-docente').value;
+      const fecha = document.getElementById('sp-fecha').value;
+
+      const printWindow = window.open('', '', 'width=920,height=720');
+      printWindow.document.write(`
+        <html>
+        <head>
+          <title>Ficha Oficial de Plan de Choque - Grupo Edúcate Colombia</title>
+          <style>
+            body { font-family: system-ui, -apple-system, sans-serif; padding: 40px; color: #0d1528; line-height: 1.5; }
+            .header { border-bottom: 3px solid #0d39f8; padding-bottom: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+            h1 { color: #0d39f8; font-size: 21px; margin-bottom: 4px; }
+            .subtitle { color: #5c6b84; font-size: 13px; font-weight: 600; }
+            .badge-dce { background: #edf2fe; color: #0d39f8; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 9999px; border: 1px solid #bfdbfe; }
+            .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 22px; }
+            .meta-table td { padding: 9px 12px; border: 1px solid #cbd5e1; font-size: 13px; }
+            .meta-table td.label { font-weight: 800; background: #f8fafc; width: 28%; color: #070c17; }
+            .section-title { font-size: 15px; font-weight: 800; color: #070c17; margin: 18px 0 8px; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 5px; }
+            ol { padding-left: 20px; font-size: 12.5px; color: #334155; }
+            li { margin-bottom: 7px; }
+            .signatures { display: flex; justify-content: space-between; margin-top: 55px; font-size: 13px; }
+            .sig-line { width: 42%; border-top: 1px solid #070c17; text-align: center; padding-top: 6px; }
+            .footer { margin-top: 40px; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 10px; display: flex; justify-content: space-between; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <h1>GRUPO EDÚCATE COLOMBIA · PLANES DE CHOQUE</h1>
+              <div class="subtitle">Ficha Institucional de Intervención Pedagógica y Nivelación de Brechas ICFES</div>
+            </div>
+            <span class="badge-dce">Diseño Centrado en Evidencias (DCE)</span>
+          </div>
+
+          <table class="meta-table">
+            <tr>
+              <td class="label">1. Simulacro Evaluado:</td>
+              <td><strong>${simulacroText}</strong></td>
+            </tr>
+            <tr>
+              <td class="label">2. Área / Asignatura:</td>
+              <td><strong>${area}</strong></td>
+            </tr>
+            <tr>
+              <td class="label">3. Componente Curricular:</td>
+              <td><strong>${componente}</strong></td>
+            </tr>
+            <tr>
+              <td class="label">4. Competencia Evaluada:</td>
+              <td><span style="color: #0d39f8; font-weight: 700;">${competencia}</span></td>
+            </tr>
+            <tr>
+              <td class="label">5. Afirmación (Saber Qué):</td>
+              <td>${afirmacion}</td>
+            </tr>
+            <tr>
+              <td class="label">6. Evidencia Crítica a Remediar:</td>
+              <td><strong>${evidencia}</strong></td>
+            </tr>
+            <tr>
+              <td class="label">7. Plan de Mejoramiento Asignado:</td>
+              <td><strong style="color: #047857;">${pm}</strong> (Cuadernillo Oficial Grupo Edúcate)</td>
+            </tr>
+            <tr>
+              <td class="label">8. Docente / Equipo Responsable:</td>
+              <td>${docente}</td>
+            </tr>
+            <tr>
+              <td class="label">9. Fecha de Mini-Control (48 Horas):</td>
+              <td><strong>${fecha}</strong></td>
+            </tr>
+          </table>
+
+          <div class="section-title">Protocolo Pedagógico de Ejecución en el Aula (Ciclo Corto 48 Horas):</div>
+          <ol>
+            <li><strong>Fase 1 · Socialización del Error Típico:</strong> El docente proyecta y analiza con los estudiantes los ítems con mayor índice de error en la sábana del simulacro, desarmando los distractores frente al grupo sin actitud punitiva.</li>
+            <li><strong>Fase 2 · Taller Guiado de Nivelación:</strong> Se resuelven las actividades prácticas del cuadernillo oficial de mejoramiento (<em>${pm}</em>) enfocado exclusivamente en la afirmación y evidencia diagnosticadas.</li>
+            <li><strong>Fase 3 · Evaluación de Cierre (Mini-Ticket 48h):</strong> Aplicación de 3 a 5 preguntas de control sobre la misma evidencia para registrar formalmente el cierre de la brecha y el avance hacia el nivel Satisfactorio o Avanzado.</li>
+          </ol>
+
+          <div class="signatures">
+            <div class="sig-line">Firma del Docente de Área<br><small style="color: #64748b;">${docente}</small></div>
+            <div class="sig-line">Firma de Coordinación Académica<br><small style="color: #64748b;">Validación de Intervención</small></div>
+          </div>
+
+          <div class="footer">
+            <span>Grupo Edúcate Colombia © 2026 · Ecosistema Integral de Evaluación Pedagógica</span>
+            <span>Alineado con las Guías de Orientación Oficiales del ICFES</span>
+          </div>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+    }
+  </script>
+</body>
+</html>
