@@ -946,88 +946,673 @@
     }
 
     /* ==========================================================================
-       MÓDULO 5: NIVELES DE DESEMPEÑO Y MCER
+       MÓDULO 5: NIVELES DE DESEMPEÑO ICFES Y ALINEACIÓN MCER (INTERACTIVO Y 3D)
        ========================================================================== */
-    .levels-grid {
+    .levels-module-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* 3 Principios ICFES */
+    .icfes-principles-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .icfes-principle-card {
+      background: var(--paper);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      transition: all 0.25s ease;
+    }
+
+    .icfes-principle-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--blue);
+      box-shadow: 0 6px 18px rgba(13, 57, 248, 0.08);
+    }
+
+    .principle-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .principle-content h4 {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
+    .principle-content p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.42;
+      margin: 0;
+    }
+
+    /* Selector de Área / Prueba (Píldoras) */
+    .area-selector-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .area-selector-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 6px;
+      border-radius: var(--radius-pill);
+      width: fit-content;
+      max-width: 100%;
+      border: 1px solid var(--line);
+    }
+
+    .area-tab-btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: transparent;
+      color: #475569;
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .area-tab-btn:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .area-tab-btn.active {
+      background: var(--blue);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(13, 57, 248, 0.32);
+      transform: scale(1.02);
+    }
+
+    /* Tablero Principal: Escalera 3D e Información */
+    .levels-stage-grid {
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 1060px) {
+      .levels-stage-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Contenedor de la Escalera 3D */
+    .staircase-visual-card {
+      background: #ffffff;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .staircase-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .staircase-title-text {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .staircase-hint {
+      font-size: 0.74rem;
+      color: var(--blue);
+      font-weight: 700;
+      background: var(--blue-subtle);
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* SVG 3D Canvas */
+    .staircase-svg-wrap {
+      width: 100%;
+      height: 310px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .staircase-svg-wrap svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.08));
+    }
+
+    /* Efectos de los escalones SVG */
+    .svg-step-group {
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .svg-step-group:hover polygon {
+      filter: brightness(1.12);
+    }
+
+    .svg-step-group.active polygon {
+      stroke: #ffffff;
+      stroke-width: 2.5;
+      stroke-linejoin: round;
+      filter: brightness(1.05) drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+    }
+
+    /* Selector de Peldaños Rápido (Píldoras Inferiores) */
+    .quick-steps-bar {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 142px;
+      margin-top: 16px;
+      padding: 12px 10px 8px;
+      background: #f8fafc;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--line);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .quick-step-btn {
+      flex: 1;
+      border-radius: 10px 10px 4px 4px;
+      border: 2px solid transparent;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      color: #ffffff;
+      position: relative;
+      box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.4), 0 4px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Alturas escalonadas (forma de escalera física ascendente) */
+    .btn-step-1 { 
+      height: 60px;
+      background: linear-gradient(135deg, #e11d48, #be123c); 
+    }
+    .btn-step-2 { 
+      height: 84px;
+      background: linear-gradient(135deg, #ea580c, #c2410c); 
+    }
+    .btn-step-3 { 
+      height: 108px;
+      background: linear-gradient(135deg, #eab308, #ca8a04); 
+    }
+    .btn-step-4 { 
+      height: 132px;
+      background: linear-gradient(135deg, #10b981, #059669); 
+    }
+
+    .quick-step-btn:hover {
+      transform: translateY(-4px);
+      filter: brightness(1.12);
+    }
+
+    .quick-step-btn.active {
+      border-color: #ffffff;
+      outline: 3px solid var(--ink);
+      box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.6), 0 8px 20px rgba(0, 0, 0, 0.3);
+      filter: brightness(1.08);
+      z-index: 2;
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    .quick-step-btn.active::before {
+      content: '▲';
+      position: absolute;
+      top: -15px;
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .quick-step-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .quick-step-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .quick-step-range {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      background: rgba(0, 0, 0, 0.22);
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Panel Detallado de Descriptores Cualitativos */
+    .level-qualitative-card {
+      background: #ffffff;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
+    }
+
+    .qualitative-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 14px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .level-headline-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Colores oficiales de nivel para badges */
+    .lvl-color-1 { background: linear-gradient(135deg, #e11d48, #be123c) !important; color: #ffffff !important; }
+    .lvl-color-2 { background: linear-gradient(135deg, #ea580c, #c2410c) !important; color: #ffffff !important; }
+    .lvl-color-3 { background: linear-gradient(135deg, #eab308, #ca8a04) !important; color: #ffffff !important; }
+    .lvl-color-4 { background: linear-gradient(135deg, #10b981, #059669) !important; color: #ffffff !important; }
+
+    .level-badge-pill {
+      font-size: 0.82rem;
+      font-weight: 900;
+      color: #ffffff;
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px !important;
+      line-height: 1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .level-range-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--ink);
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+    }
+
+    .btn-inclusive-toggle {
+      padding: 6px 14px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--blue);
+      background: #ffffff;
+      color: var(--blue);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-inclusive-toggle:hover {
+      background: var(--blue-subtle);
+    }
+
+    .official-lead-box {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.55;
+      background: #f8fafc;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--blue);
+    }
+
+    /* Caja Desplegable Inclusiva */
+    .inclusive-details-box {
+      background: #fffbeb;
+      border: 1.5px dashed #f59e0b;
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: none;
+      font-size: 0.82rem;
+      color: #92400e;
+      line-height: 1.5;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .inclusive-details-box strong {
+      color: #78350f;
+    }
+
+    /* Lista de Descriptores */
+    .descriptors-block {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .descriptors-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .descriptors-scrollable-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 340px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .descriptor-row-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 9px 12px;
+      background: #fafcff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      font-size: 0.86rem;
+      color: var(--ink);
+      line-height: 1.48;
+      transition: all 0.15s ease;
+    }
+
+    .descriptor-row-item:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .descriptor-arrow-icon {
+      color: var(--blue);
+      font-weight: 900;
+      font-size: 1.1rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* SIMULADOR INTERACTIVO Y CLIMBER */
+    .simulator-station-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      color: #ffffff;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (max-width: 900px) {
+      .simulator-station-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .simulator-station-card::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      left: -60px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(13, 57, 248, 0.3) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .sim-left-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sim-header-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sim-header-desc {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .sim-slider-controls {
+      display: flex;
+      align-items: center;
       gap: 18px;
     }
 
-    .level-card {
-      background: #ffffff;
+    .sim-range-slider {
+      flex: 1;
+      height: 10px;
+      border-radius: 5px;
+      background: #334155;
+      outline: none;
+      cursor: pointer;
+      accent-color: var(--cyan);
+    }
+
+    .sim-score-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: #38bdf8;
+      background: rgba(14, 165, 233, 0.15);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      padding: 6px 18px;
       border-radius: var(--radius-md);
-      border: 1px solid var(--line);
+      min-width: 85px;
+      text-align: center;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+    }
+
+    .sim-presets-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .sim-preset-btn {
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .sim-preset-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      border-color: #ffffff;
+    }
+
+    .sim-right-feedback {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
       padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      position: relative;
+      backdrop-filter: blur(10px);
     }
 
-    .level-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      border-radius: var(--radius-md) var(--radius-md) 0 0;
-    }
-
-    .lvl-1::before { background: var(--rose); }
-    .lvl-2::before { background: var(--amber); }
-    .lvl-3::before { background: var(--blue); }
-    .lvl-4::before { background: var(--emerald); }
-
-    .level-badge {
-      font-size: 0.72rem;
+    .sim-feedback-level-badge {
+      font-size: 0.8rem;
       font-weight: 800;
       text-transform: uppercase;
-      padding: 3px 10px;
+      padding: 6px 14px;
       border-radius: var(--radius-pill);
       width: fit-content;
-    }
-
-    .lvl-1 .level-badge { background: var(--rose-subtle); color: #be123c; }
-    .lvl-2 .level-badge { background: var(--amber-subtle); color: #b45309; }
-    .lvl-3 .level-badge { background: var(--blue-subtle); color: var(--blue); }
-    .lvl-4 .level-badge { background: var(--emerald-subtle); color: #047857; }
-
-    .mcer-scale-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .mcer-step {
-      background: var(--paper);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--line);
-      padding: 16px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
+      height: 30px !important;
+      line-height: 1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
     }
 
-    .mcer-code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.4rem;
+    .sim-feedback-headline {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .sim-feedback-gap-text {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    /* MATRIZ COMPARATIVA DE CORTES */
+    .cutoff-matrix-card {
+      background: #ffffff;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+    }
+
+    .cutoff-table-responsive {
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .cutoff-table-modern {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .cutoff-table-modern th {
+      padding: 12px 14px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+
+    .cutoff-table-modern td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .cutoff-table-modern tr:hover td {
+      background: #f1f5f9;
+    }
+
+    .cutoff-table-modern td.area-name-cell {
+      text-align: left;
       font-weight: 800;
       color: var(--ink);
     }
 
-    .mcer-range {
-      font-size: 0.72rem;
-      font-weight: 700;
-      background: #ffffff;
-      padding: 2px 8px;
+    .table-chip-lvl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 10px;
       border-radius: var(--radius-pill);
-      border: 1px solid var(--line);
+      display: inline-block;
     }
+
+    .chip-1 { background: #ffe4e6; color: #be123c; border: 1px solid #fecdd3; }
+    .chip-2 { background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
+    .chip-3 { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .chip-4 { background: #d1fae5; color: #047857; border: 1px solid #a7f3d0; }
+
 
     /* ==========================================================================
        MÓDULO 6: PLANES DE CHOQUE Y GENERADOR RÁPIDO
@@ -1263,10 +1848,35 @@
           
           <!-- Galería de Portadas de Libros -->
           <div class="route-books-gallery">
-            <!-- Portada Oficial de Dzeta 10° -->
+            <!-- Portada Oficial de Dzeta 10° (Vectorial de Alta Fidelidad) -->
             <div class="book-cover-item" title="Simulacro Dzeta 10.° (Diagnóstico Base)">
-              <div class="book-cover-img-wrap">
-                <img src="portada-dzeta-10.png" onerror="this.src='assets/portada-dzeta-10.png'" alt="Dzeta 10°" class="book-cover-img">
+              <div class="book-cover-img-wrap" style="background: linear-gradient(145deg, #062b1e 0%, #0d4a36 45%, #051610 100%);">
+                <svg viewBox="0 0 160 220" width="100%" height="100%" style="display: block;">
+                  <defs>
+                    <linearGradient id="zetaGrad" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#34d399"/>
+                      <stop offset="100%" stop-color="#10b981"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Header badge -->
+                  <rect x="12" y="12" width="60" height="15" rx="7.5" fill="#10b981" />
+                  <text x="42" y="23" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="800" fill="#042f21" text-anchor="middle">10.° GRADO</text>
+                  <circle cx="138" cy="19" r="6" fill="rgba(255,255,255,0.15)"/>
+                  <text x="138" y="22" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="800" fill="#34d399" text-anchor="middle">1</text>
+                  <!-- Letra Griega Zeta estilizada -->
+                  <text x="80" y="98" font-family="'Plus Jakarta Sans', sans-serif" font-size="64" font-weight="900" fill="url(#zetaGrad)" text-anchor="middle" opacity="0.95">Ζ</text>
+                  <!-- Título Dzeta -->
+                  <text x="80" y="128" font-family="'Plus Jakarta Sans', sans-serif" font-size="18" font-weight="800" fill="#ffffff" letter-spacing="1" text-anchor="middle">DZETA</text>
+                  <text x="80" y="142" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="700" fill="#a7f3d0" letter-spacing="0.5" text-anchor="middle">SABER LAB · DIAGNÓSTICO</text>
+                  <!-- Línea divisoria -->
+                  <line x1="24" y1="152" x2="136" y2="152" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.4"/>
+                  <!-- Resumen de áreas -->
+                  <rect x="24" y="160" width="112" height="28" rx="4" fill="rgba(255,255,255,0.06)"/>
+                  <text x="80" y="171" font-family="'Plus Jakarta Sans', sans-serif" font-size="6.5" font-weight="600" fill="#e2e8f0" text-anchor="middle">5 ÁREAS NUCLEARES ICFES</text>
+                  <text x="80" y="181" font-family="'JetBrains Mono', monospace" font-size="6.5" font-weight="700" fill="#34d399" text-anchor="middle">DIAGNÓSTICO & NIVELACIÓN</text>
+                  <!-- Footer institucional -->
+                  <text x="80" y="206" font-family="'Plus Jakarta Sans', sans-serif" font-size="6.5" font-weight="800" fill="#6ee7b7" letter-spacing="0.8" text-anchor="middle">GRUPO EDÚCATE COLOMBIA</text>
+                </svg>
               </div>
               <span class="book-cover-title">Dzeta</span>
               <span class="book-cover-grade">Grado 10.°</span>
@@ -1446,21 +2056,21 @@
               <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
               <td><strong>Matemáticas 1</strong></td>
               <td>25 preguntas</td>
-              <td>75 minutos</td>
+              <td>50 minutos</td>
               <td>Enfoque en Razonamiento Cuantitativo y Álgebra</td>
             </tr>
             <tr>
               <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
               <td><strong>Lectura Crítica</strong></td>
               <td>41 preguntas</td>
-              <td>75 minutos</td>
+              <td>85 minutos</td>
               <td>Textos continuos (filosóficos y literarios) y discontinuos</td>
             </tr>
             <tr>
               <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
               <td><strong>Sociales y Ciudadanas 1</strong></td>
               <td>25 preguntas</td>
-              <td>60 minutos</td>
+              <td>50 minutos</td>
               <td>Pensamiento social, Constitución Política y contexto histórico</td>
             </tr>
             <tr>
@@ -1470,10 +2080,17 @@
               <td>60 minutos</td>
               <td>Química y Biología básica / Indagación de fenómenos</td>
             </tr>
+            <tr>
+              <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
+              <td><strong>Cuestionario Socioeconómico</strong></td>
+              <td>11 preguntas</td>
+              <td>15 minutos</td>
+              <td>Caracterización contextual (no afecta el puntaje global)</td>
+            </tr>
             <tr style="background: var(--paper); font-weight: 800;">
               <td><strong>Subtotal Sesión 1</strong></td>
               <td><strong>4 Pruebas Puntuables</strong></td>
-              <td><strong>120 preguntas</strong></td>
+              <td><strong>131 ítems (120 puntuables)</strong></td>
               <td><strong>4 horas y 30 minutos</strong></td>
               <td><strong>Mide frescura cognitiva y concentración matutina</strong></td>
             </tr>
@@ -1481,14 +2098,14 @@
               <td><span class="badge-session">Sesión 2 (Tarde)</span></td>
               <td><strong>Sociales y Ciudadanas 2</strong></td>
               <td>25 preguntas</td>
-              <td>75 minutos</td>
+              <td>50 minutos</td>
               <td>Análisis de perspectivas en conflicto y pensamiento sistémico</td>
             </tr>
             <tr>
               <td><span class="badge-session">Sesión 2 (Tarde)</span></td>
               <td><strong>Matemáticas 2</strong></td>
               <td>25 preguntas</td>
-              <td>60 minutos</td>
+              <td>50 minutos</td>
               <td>Geometría, trigonometría, estadística y probabilidad</td>
             </tr>
             <tr>
@@ -1502,7 +2119,7 @@
               <td><span class="badge-session">Sesión 2 (Tarde)</span></td>
               <td><strong>Inglés (Partes 1 a 7)</strong></td>
               <td>55 preguntas</td>
-              <td>75 minutos</td>
+              <td>80 minutos</td>
               <td>Desde avisos básicos (A1) hasta comprensión inferencial (B+)</td>
             </tr>
             <tr style="background: var(--paper); font-weight: 800;">
@@ -1631,96 +2248,339 @@
           <div class="section-num">5</div>
           <div>
             <h2>Niveles de Desempeño ICFES y Alineación MCER (Inglés)</h2>
-            <p>Escala cuantitativa (0-100 puntos) y descriptores cualitativos para interpretar el reporte individual e institucional.</p>
+            <p>Descripción cualitativa, jerárquica e inclusiva de habilidades y conocimientos por prueba oficial del ICFES Saber 11°.</p>
           </div>
         </div>
-        <span class="section-tag">Interpretación de Resultados</span>
+        <span class="section-tag">Marco Oficial ICFES 2026</span>
       </div>
 
-      <div>
-        <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--ink);">
-          Los 4 Niveles de Desempeño Generales (Matemáticas, Lectura, Sociales y Ciencias)
-        </h3>
-        <p style="font-size: 0.86rem; color: var(--muted); margin-bottom: 16px;">
-          Cada área evalúa al estudiante en cuatro categorías jerárquicas:
-        </p>
-        <div class="levels-grid">
-          <div class="level-card lvl-1">
-            <span class="level-badge">Nivel 1 (0 - 35 pts)</span>
-            <h4 style="font-weight: 800; font-size: 1.05rem;">Insuficiente</h4>
-            <p style="font-size: 0.83rem; color: var(--muted); line-height: 1.45;">
-              El estudiante no demuestra los aprendizajes mínimos. Dificultad para extraer información explícita de textos sencillos o interpretar tablas directas. Requiere nivelación de base.
-            </p>
+      <div class="levels-module-wrap">
+        <!-- 3 Principios Oficiales ICFES -->
+        <div class="icfes-principles-grid">
+          <div class="icfes-principle-card">
+            <span class="principle-icon">🎯</span>
+            <div class="principle-content">
+              <h4>Son Particulares</h4>
+              <p>Están definidos específicamente para cada prueba. Los puntajes de corte son propios de cada disciplina y no deben homologarse linealmente.</p>
+            </div>
+          </div>
+          <div class="icfes-principle-card">
+            <span class="principle-icon">📈</span>
+            <div class="principle-content">
+              <h4>Son Jerárquicos</h4>
+              <p>Poseen una complejidad cognitiva creciente, cuyo nivel de mayor complejidad es el <strong>Nivel 4</strong> (o <strong>B1</strong> en la prueba de Inglés).</p>
+            </div>
+          </div>
+          <div class="icfes-principle-card">
+            <span class="principle-icon">🔗</span>
+            <div class="principle-content">
+              <h4>Son Inclusivos (Acumulativos)</h4>
+              <p>Para estar ubicado en un nivel se requiere haber superado y consolidado los saberes y destrezas de todos los niveles inferiores.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selector de Prueba / Área con Pestañas -->
+        <div class="area-selector-container">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <span style="font-size: 0.9rem; font-weight: 800; color: var(--ink);">Selecciona la Prueba Oficial a Consultar:</span>
+            <span style="font-size: 0.78rem; color: var(--muted);">Haz clic en un área para actualizar la escalera 3D y los descriptores</span>
+          </div>
+          <div class="area-selector-tabs">
+            <button class="area-tab-btn active" id="tab-lectura" onclick="switchLevelsArea('lectura')">
+              <span>📖</span> Lectura Crítica
+            </button>
+            <button class="area-tab-btn" id="tab-matematicas" onclick="switchLevelsArea('matematicas')">
+              <span>📐</span> Matemáticas
+            </button>
+            <button class="area-tab-btn" id="tab-ciencias" onclick="switchLevelsArea('ciencias')">
+              <span>🔬</span> Ciencias Naturales
+            </button>
+            <button class="area-tab-btn" id="tab-sociales" onclick="switchLevelsArea('sociales')">
+              <span>🏛️</span> Sociales y Ciudadanas
+            </button>
+            <button class="area-tab-btn" id="tab-ingles" onclick="switchLevelsArea('ingles')">
+              <span>🌐</span> Inglés (Alineación MCER)
+            </button>
+          </div>
+        </div>
+
+        <!-- Tablero Principal: Escalera 3D e Información Cualitativa -->
+        <div class="levels-stage-grid">
+          <!-- Tarjeta Gráfica de la Escalera 3D -->
+          <div class="staircase-visual-card">
+            <div class="staircase-top-bar">
+              <span class="staircase-title-text" id="staircase-area-title">
+                <span>📖</span> Prueba Lectura Crítica
+              </span>
+              <span class="staircase-hint">Haz clic en un escalón</span>
+            </div>
+
+            <!-- Canvas SVG de la Escalera Isométrica 3D -->
+            <div class="staircase-svg-wrap">
+              <svg viewBox="0 0 560 390" id="staircase-svg" xmlns="http://www.w3.org/2000/svg">
+                <!-- Sombra en la base -->
+                <ellipse cx="240" cy="375" rx="180" ry="14" fill="rgba(0,0,0,0.06)" />
+
+                <!-- Muro Lateral Derecho Continuo (Sólido Grisáceo Arquitectónico) -->
+                <polygon points="155,365 155,317 210,287 210,239 265,209 265,161 320,131 320,83 375,53 375,220 155,365" 
+                         fill="#64748b" stroke="#475569" stroke-width="1.5" stroke-linejoin="round" />
+
+                <!-- PASO 4 (SUPERIOR) -->
+                <g class="svg-step-group" id="svg-step-3" onclick="selectStairLevel(3)">
+                  <!-- Riser 4 -->
+                  <polygon points="235,86 320,131 320,83 235,38" fill="#10b981" id="front-poly-3" stroke="#059669" stroke-width="1" />
+                  <!-- Tread 4 -->
+                  <polygon points="235,38 320,83 375,53 290,8" fill="#34d399" id="top-poly-3" stroke="#059669" stroke-width="1" />
+                  <!-- Número 4 en el tread -->
+                  <text x="305" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-3">4</text>
+                  <!-- Conector hacia Callout 4 -->
+                  <line x1="375" y1="53" x2="415" y2="53" stroke="#10b981" stroke-width="2" stroke-dasharray="3,3"/>
+                  <circle cx="375" cy="53" r="4.5" fill="#10b981" />
+                </g>
+
+                <!-- PASO 3 -->
+                <g class="svg-step-group" id="svg-step-2" onclick="selectStairLevel(2)">
+                  <!-- Riser 3 -->
+                  <polygon points="180,164 265,209 265,161 180,116" fill="#eab308" id="front-poly-2" stroke="#ca8a04" stroke-width="1" />
+                  <!-- Tread 3 -->
+                  <polygon points="180,116 265,161 320,131 235,86" fill="#fde047" id="top-poly-2" stroke="#ca8a04" stroke-width="1" />
+                  <!-- Número 3 en el tread -->
+                  <text x="250" y="130" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-2">3</text>
+                  <!-- Conector hacia Callout 3 -->
+                  <line x1="320" y1="131" x2="415" y2="131" stroke="#eab308" stroke-width="2" stroke-dasharray="3,3"/>
+                  <circle cx="320" cy="131" r="4.5" fill="#eab308" />
+                </g>
+
+                <!-- PASO 2 -->
+                <g class="svg-step-group" id="svg-step-1" onclick="selectStairLevel(1)">
+                  <!-- Riser 2 -->
+                  <polygon points="125,242 210,287 210,239 125,194" fill="#ea580c" id="front-poly-1" stroke="#c2410c" stroke-width="1" />
+                  <!-- Tread 2 -->
+                  <polygon points="125,194 210,287 265,209 180,164" fill="#fb923c" id="top-poly-1" stroke="#c2410c" stroke-width="1" />
+                  <!-- Número 2 en el tread -->
+                  <text x="195" y="208" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-1">2</text>
+                  <!-- Conector hacia Callout 2 -->
+                  <line x1="265" y1="209" x2="415" y2="209" stroke="#ea580c" stroke-width="2" stroke-dasharray="3,3"/>
+                  <circle cx="265" cy="209" r="4.5" fill="#ea580c" />
+                </g>
+
+                <!-- PASO 1 (BASE INFERIOR) -->
+                <g class="svg-step-group" id="svg-step-0" onclick="selectStairLevel(0)">
+                  <!-- Pared Lateral Izquierda de Paso 1 (con 'NIVELES') -->
+                  <polygon points="70,320 70,272 125,242 125,290 70,320" fill="#be123c" id="side-poly-0" stroke="#9f1239" stroke-width="1" />
+                  <text x="96" y="284" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="900" fill="#ffffff" transform="rotate(-30 96 284)" letter-spacing="1">NIVELES</text>
+                  <!-- Riser 1 -->
+                  <polygon points="70,320 155,365 155,317 70,272" fill="#e11d48" id="front-poly-0" stroke="#be123c" stroke-width="1" />
+                  <!-- Tread 1 -->
+                  <polygon points="70,272 155,317 210,287 125,242" fill="#fb7185" id="top-poly-0" stroke="#be123c" stroke-width="1" />
+                  <!-- Número 1 en el tread -->
+                  <text x="140" y="286" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-0">1</text>
+                  <!-- Conector hacia Callout 1 -->
+                  <line x1="210" y1="287" x2="415" y2="287" stroke="#e11d48" stroke-width="2" stroke-dasharray="3,3"/>
+                  <circle cx="210" cy="287" r="4.5" fill="#e11d48" />
+                </g>
+
+                <!-- CALLOUTS DE PUNTAJE (COLUMNA DERECHA PERFECTAMENTE ALINEADA Y ESPACIADA) -->
+                <!-- Callout 4 -->
+                <g id="svg-callout-3" transform="translate(415, 38)">
+                  <rect x="0" y="0" width="125" height="30" rx="15" fill="#ffffff" stroke="#10b981" stroke-width="2" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.1))"/>
+                  <circle cx="15" cy="15" r="5" fill="#10b981"/>
+                  <text x="28" y="19" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#065f46" id="svg-callout-text-3">66 a 100 pts</text>
+                </g>
+
+                <!-- Callout 3 -->
+                <g id="svg-callout-2" transform="translate(415, 116)">
+                  <rect x="0" y="0" width="125" height="30" rx="15" fill="#ffffff" stroke="#eab308" stroke-width="2" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.1))"/>
+                  <circle cx="15" cy="15" r="5" fill="#eab308"/>
+                  <text x="28" y="19" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#854d0e" id="svg-callout-text-2">51 a 65 pts</text>
+                </g>
+
+                <!-- Callout 2 -->
+                <g id="svg-callout-1" transform="translate(415, 194)">
+                  <rect x="0" y="0" width="125" height="30" rx="15" fill="#ffffff" stroke="#ea580c" stroke-width="2" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.1))"/>
+                  <circle cx="15" cy="15" r="5" fill="#ea580c"/>
+                  <text x="28" y="19" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#9a3412" id="svg-callout-text-1">36 a 50 pts</text>
+                </g>
+
+                <!-- Callout 1 -->
+                <g id="svg-callout-0" transform="translate(415, 272)">
+                  <rect x="0" y="0" width="125" height="30" rx="15" fill="#ffffff" stroke="#e11d48" stroke-width="2" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.1))"/>
+                  <circle cx="15" cy="15" r="5" fill="#e11d48"/>
+                  <text x="28" y="19" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#9f1239" id="svg-callout-text-0">0 a 35 pts</text>
+                </g>
+
+                <!-- Estudiantes celebrando (como en el ICFES oficial) -->
+                <g transform="translate(460, 325)">
+                  <text x="0" y="24" font-size="28" text-anchor="middle">👫🎒</text>
+                </g>
+
+                <!-- Avatar Estudiante Climber Pin (sobre el centro del tread activo) -->
+                <g id="svg-climber-pin" transform="translate(250, 99)" style="transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                  <circle cx="0" cy="0" r="15" fill="#0d39f8" stroke="#ffffff" stroke-width="3" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.35))"/>
+                  <text x="0" y="5.5" font-size="14" text-anchor="middle">🎓</text>
+                  <circle cx="0" cy="0" r="20" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.7">
+                    <animate attributeName="r" values="15;24;15" dur="2s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite"/>
+                  </circle>
+                </g>
+              </svg>
+            </div>
+
+            <!-- Selector Rápido de Peldaños (4 Botones con Gradientes Oficiales) -->
+            <div class="quick-steps-bar">
+              <button class="quick-step-btn btn-step-1" id="qbtn-0" onclick="selectStairLevel(0)" title="Peldaño 1: Nivel Basal">
+                <span class="quick-step-code" id="qcode-0">1</span>
+                <span class="quick-step-label">NIVEL 1</span>
+                <span class="quick-step-range" id="qrange-0">0 a 35</span>
+              </button>
+              <button class="quick-step-btn btn-step-2" id="qbtn-1" onclick="selectStairLevel(1)" title="Peldaño 2: Nivel Mínimo">
+                <span class="quick-step-code" id="qcode-1">2</span>
+                <span class="quick-step-label">NIVEL 2</span>
+                <span class="quick-step-range" id="qrange-1">36 a 50</span>
+              </button>
+              <button class="quick-step-btn btn-step-3 active" id="qbtn-2" onclick="selectStairLevel(2)" title="Peldaño 3: Nivel Satisfactorio">
+                <span class="quick-step-code" id="qcode-2">3</span>
+                <span class="quick-step-label">NIVEL 3</span>
+                <span class="quick-step-range" id="qrange-2">51 a 65</span>
+              </button>
+              <button class="quick-step-btn btn-step-4" id="qbtn-3" onclick="selectStairLevel(3)" title="Peldaño 4: Cúspide de Excelencia">
+                <span class="quick-step-code" id="qcode-3">4</span>
+                <span class="quick-step-label">NIVEL 4</span>
+                <span class="quick-step-range" id="qrange-3">66 a 100</span>
+              </button>
+            </div>
           </div>
 
-          <div class="level-card lvl-2">
-            <span class="level-badge">Nivel 2 (36 - 50 pts)</span>
-            <h4 style="font-weight: 800; font-size: 1.05rem;">Mínimo</h4>
-            <p style="font-size: 0.83rem; color: var(--muted); line-height: 1.45;">
-              Reconoce conceptos fundamentales y realiza operaciones aritméticas o deducciones locales. Puede caer en distractores que apelan a conocimientos intuitivos no científicos.
-            </p>
+          <!-- Panel Cualitativo de Descriptores Oficiales -->
+          <div class="level-qualitative-card">
+            <div class="qualitative-card-header">
+              <div class="level-headline-group">
+                <span class="level-badge-pill lvl-color-3" id="qual-level-badge">NIVEL 3 · SATISFACTORIO</span>
+                <span class="level-range-pill" id="qual-range-badge">Puntaje Oficial: 51 a 65 Pts</span>
+              </div>
+              <button class="btn-inclusive-toggle" onclick="toggleCumulativeView()" id="btn-inclusive-toggle">
+                <span>🔗</span> Ver Efecto Inclusivo
+              </button>
+            </div>
+
+            <!-- Premisa Oficial del ICFES -->
+            <div class="official-lead-box" id="official-lead-box">
+              El evaluado que se ubica en el nivel 3, además de lo descrito en los niveles 1 y 2, interpreta información de textos al inferir contenidos implícitos y reconocer estructuras, estrategias discursivas y juicios valorativos, también demuestra que:
+            </div>
+
+            <!-- Caja Desplegable de Inclusión Acumulativa -->
+            <div class="inclusive-details-box" id="inclusive-details-box">
+              <strong>Principio de Inclusión y Acumulación Cognitiva del ICFES:</strong>
+              Para alcanzar este nivel, el estudiante no solo domina las tareas aquí descritas, sino que ha consolidado con suficiencia los conocimientos de los peldaños previos:
+              <div id="inclusive-details-list" style="margin-top: 8px;"></div>
+            </div>
+
+            <!-- Lista de Descriptores de Habilidad y Conocimiento -->
+            <div class="descriptors-block">
+              <div class="descriptors-header-row">
+                <span>Descriptores Oficiales de Habilidades Demostradas:</span>
+                <span id="descriptors-counter" style="color: var(--blue); font-weight: 800;">10 Descriptores</span>
+              </div>
+              <div class="descriptors-scrollable-list" id="descriptors-scrollable-list">
+                <!-- Se pobla dinámicamente -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIMULADOR INTERACTIVO Y CLIMBER -->
+        <div class="simulator-station-card">
+          <div class="sim-left-panel">
+            <div>
+              <div class="sim-header-title">
+                <span>⚡</span> Simulador Interactivo de Desempeño Saber 11°
+              </div>
+              <p class="sim-header-desc">
+                Desliza el puntaje del estudiante o presiona un botón de prueba rápida para diagnosticar en tiempo real el escalón alcanzado, las destrezas consolidadas y la brecha hacia el siguiente nivel.
+              </p>
+            </div>
+
+            <div class="sim-slider-controls">
+              <input type="range" min="0" max="100" value="62" class="sim-range-slider" id="sim-score-slider" oninput="onSimulatorScoreChange(this.value)">
+              <div class="sim-score-counter" id="sim-score-display">62</div>
+            </div>
+
+            <div class="sim-presets-row">
+              <span style="font-size: 0.74rem; color: #94a3b8; font-weight: 700;">Pruebas Rápidas:</span>
+              <button class="sim-preset-btn" onclick="setSimulatorScore(25)">25 pts (N1)</button>
+              <button class="sim-preset-btn" onclick="setSimulatorScore(45)">45 pts (N2)</button>
+              <button class="sim-preset-btn" onclick="setSimulatorScore(62)">62 pts (N3)</button>
+              <button class="sim-preset-btn" onclick="setSimulatorScore(85)">85 pts (N4)</button>
+            </div>
           </div>
 
-          <div class="level-card lvl-3">
-            <span class="level-badge">Nivel 3 (51 - 70 pts)</span>
-            <h4 style="font-weight: 800; font-size: 1.05rem;">Satisfactorio</h4>
-            <p style="font-size: 0.83rem; color: var(--muted); line-height: 1.45;">
-              Nivel esperado para la educación media. Relaciona variables, valida hipótesis, identifica la intención del autor y resuelve problemas no rutinarios con modelos formales.
-            </p>
-          </div>
-
-          <div class="level-card lvl-4">
-            <span class="level-badge">Nivel 4 (71 - 100 pts)</span>
-            <h4 style="font-weight: 800; font-size: 1.05rem;">Avanzado</h4>
-            <p style="font-size: 0.83rem; color: var(--muted); line-height: 1.45;">
-              Pensamiento crítico reflexivo superior. Detecta falacias sofisticadas, juzga la validez epistemológica de argumentos y modela sistemas complejos. Perfil para becas de excelencia.
+          <div class="sim-right-feedback">
+            <span class="sim-feedback-level-badge lvl-color-3" id="sim-badge">Nivel 3 · Satisfactorio</span>
+            <div class="sim-feedback-headline" id="sim-headline">Desempeño Esperado en la Media</div>
+            <p class="sim-feedback-gap-text" id="sim-gap-desc">
+              El estudiante domina el nivel 3. Le faltan <strong>4 puntos</strong> para ascender al Nivel 4 (Avanzado).
             </p>
           </div>
         </div>
-      </div>
 
-      <!-- MCER Inglés -->
-      <div style="margin-top: 10px;">
-        <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--ink);">
-          Alineación de la Prueba de Inglés con el Marco Común Europeo (MCER)
-        </h3>
-        <p style="font-size: 0.86rem; color: var(--muted); margin-bottom: 14px;">
-          En Colombia, el Ministerio de Educación y el ICFES clasifican la prueba en 5 bandas según el MCER:
-        </p>
-        <div class="mcer-scale-bar">
-          <div class="mcer-step">
-            <div class="mcer-code">A-</div>
-            <div class="mcer-range">0 - 47 puntos</div>
-            <strong style="font-size: 0.82rem; margin-top: 4px;">Bajo Principiante</strong>
-            <p style="font-size: 0.75rem; color: var(--muted);">No alcanza el vocabulario elemental de la Parte 1 ni reconoce avisos cotidianos.</p>
-          </div>
-
-          <div class="mcer-step">
-            <div class="mcer-code">A1</div>
-            <div class="mcer-range">48 - 57 puntos</div>
-            <strong style="font-size: 0.82rem; margin-top: 4px;">Acceso Elemental</strong>
-            <p style="font-size: 0.75rem; color: var(--muted);">Comprende saludos, avisos de lugares públicos y emparejamiento léxico básico.</p>
-          </div>
-
-          <div class="mcer-step">
-            <div class="mcer-code">A2</div>
-            <div class="mcer-range">58 - 67 puntos</div>
-            <strong style="font-size: 0.82rem; margin-top: 4px;">Plataforma Básica</strong>
-            <p style="font-size: 0.75rem; color: var(--muted);">Intercambios comunicativos cortos (Parte 3) y lectura de textos descriptivos simples.</p>
-          </div>
-
-          <div class="mcer-step" style="border-color: var(--blue); background: var(--blue-subtle);">
-            <div class="mcer-code" style="color: var(--blue);">B1</div>
-            <div class="mcer-range" style="background: var(--blue); color: #ffffff;">68 - 78 puntos</div>
-            <strong style="font-size: 0.82rem; margin-top: 4px; color: var(--blue);">Umbral / Estándar MEN</strong>
-            <p style="font-size: 0.75rem; color: var(--ink);">Meta esperada para graduados de 11°. Comprensión inferencial de artículos y gramática.</p>
-          </div>
-
-          <div class="mcer-step" style="border-color: var(--emerald); background: var(--emerald-subtle);">
-            <div class="mcer-code" style="color: #047857;">B+</div>
-            <div class="mcer-range" style="background: #047857; color: #ffffff;">79 - 100 puntos</div>
-            <strong style="font-size: 0.82rem; margin-top: 4px; color: #047857;">Nivel Superior</strong>
-            <p style="font-size: 0.75rem; color: #065f46;">Resuelve textos complejos (Parte 7 - cloze léxico avanzado) con precisión nativa.</p>
+        <!-- Matriz Comparativa de Cortes entre las 5 Pruebas -->
+        <div class="cutoff-matrix-card">
+          <h4 style="font-size: 1rem; font-weight: 800; color: var(--ink); margin-bottom: 4px;">
+            Matriz Comparativa de Puntajes de Corte Oficiales Saber 11°
+          </h4>
+          <p style="font-size: 0.82rem; color: var(--muted); margin-bottom: 14px;">
+            Evidencia del principio de <em>particularidad</em>: los rangos psicométricos varían según la calibración de ítems de cada área disciplinar. Haz clic en cualquier fila para cargar esa prueba.
+          </p>
+          <div class="cutoff-table-responsive">
+            <table class="cutoff-table-modern">
+              <thead>
+                <tr>
+                  <th style="background: #0f172a; text-align: left;">Prueba Evaluada</th>
+                  <th style="background: #be123c;">Nivel 1 / Pre A1</th>
+                  <th style="background: #c2410c;">Nivel 2 / A1</th>
+                  <th style="background: #ca8a04;">Nivel 3 / A2</th>
+                  <th style="background: #059669;">Nivel 4 / B1 (Superior)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick="switchLevelsArea('lectura')">
+                  <td class="area-name-cell"><span>📖</span> Lectura Crítica</td>
+                  <td><span class="table-chip-lvl chip-1">0 a 35</span></td>
+                  <td><span class="table-chip-lvl chip-2">36 a 50</span></td>
+                  <td><span class="table-chip-lvl chip-3">51 a 65</span></td>
+                  <td><span class="table-chip-lvl chip-4">66 a 100</span></td>
+                </tr>
+                <tr onclick="switchLevelsArea('matematicas')">
+                  <td class="area-name-cell"><span>📐</span> Matemáticas</td>
+                  <td><span class="table-chip-lvl chip-1">0 a 35</span></td>
+                  <td><span class="table-chip-lvl chip-2">36 a 50</span></td>
+                  <td><span class="table-chip-lvl chip-3">51 a 70</span></td>
+                  <td><span class="table-chip-lvl chip-4">71 a 100</span></td>
+                </tr>
+                <tr onclick="switchLevelsArea('ciencias')">
+                  <td class="area-name-cell"><span>🔬</span> Ciencias Naturales</td>
+                  <td><span class="table-chip-lvl chip-1">0 a 40</span></td>
+                  <td><span class="table-chip-lvl chip-2">41 a 55</span></td>
+                  <td><span class="table-chip-lvl chip-3">56 a 70</span></td>
+                  <td><span class="table-chip-lvl chip-4">71 a 100</span></td>
+                </tr>
+                <tr onclick="switchLevelsArea('sociales')">
+                  <td class="area-name-cell"><span>🏛️</span> Sociales y Ciudadanas</td>
+                  <td><span class="table-chip-lvl chip-1">0 a 40</span></td>
+                  <td><span class="table-chip-lvl chip-2">41 a 55</span></td>
+                  <td><span class="table-chip-lvl chip-3">56 a 70</span></td>
+                  <td><span class="table-chip-lvl chip-4">71 a 100</span></td>
+                </tr>
+                <tr onclick="switchLevelsArea('ingles')">
+                  <td class="area-name-cell"><span>🌐</span> Inglés (Alineado MCER)</td>
+                  <td><span class="table-chip-lvl chip-1">Pre A1: 0 a 36</span></td>
+                  <td><span class="table-chip-lvl chip-2">A1: 37 a 57</span></td>
+                  <td><span class="table-chip-lvl chip-3">A2: 58 a 70</span></td>
+                  <td><span class="table-chip-lvl chip-4">B1: 71 a 100</span></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -2128,6 +2988,664 @@
         text: "Verifica que la pregunta no favorezca ni perjudique a estudiantes por su región, género, nivel socioeconómico o vocabulario no enseñado. Asegura que lo que se mida sea puramente la competencia evaluada."
       }
     };
+
+
+
+    // ==========================================================================
+    // BASE DE DATOS Y LÓGICA DE NIVELES DE DESEMPEÑO ICFES (ESCALERA 3D Y SIMULADOR)
+    // ==========================================================================
+    const ICFES_LEVELS_DATA = {
+      lectura: {
+        title: "📖 Prueba Lectura Crítica",
+        isMcer: false,
+        climberPositions: [
+          { x: 140, y: 255 }, // Step 1
+          { x: 195, y: 177 }, // Step 2
+          { x: 250, y: 99 },  // Step 3
+          { x: 305, y: 21 }   // Step 4
+        ],
+        levels: [
+          {
+            level: 1,
+            code: "1",
+            name: "Nivel 1",
+            tag: "Insuficiente",
+            range: "0 a 35",
+            min: 0,
+            max: 35,
+            lead: "El evaluado que se ubica en el nivel 1, demuestra que:",
+            descriptors: [
+              "Identifica elementos literales en textos continuos y discontinuos sin establecer relaciones de significado."
+            ]
+          },
+          {
+            level: 2,
+            code: "2",
+            name: "Nivel 2",
+            tag: "Mínimo",
+            range: "36 a 50",
+            min: 36,
+            max: 50,
+            lead: "El evaluado que se ubica en el nivel 2, además de lo descrito en el nivel 1, comprende textos continuos y discontinuos de manera literal. Asimismo, reconoce información explícita y la relaciona con el contexto, también demuestra que:",
+            descriptors: [
+              "Identifica información local del texto.",
+              "Identifica la estructura de textos continuos y discontinuos.",
+              "Identifica relaciones básicas entre componentes del texto.",
+              "Identifica fenómenos semánticos básicos: sinónimos y antónimos.",
+              "Reconoce en un texto la diferencia entre proposición y párrafo.",
+              "Reconoce el sentido local y global del texto.",
+              "Identifica intenciones comunicativas explícitas.",
+              "Identifica relaciones básicas: contraste, similitud y complementación entre textos presentes."
+            ]
+          },
+          {
+            level: 3,
+            code: "3",
+            name: "Nivel 3",
+            tag: "Satisfactorio",
+            range: "51 a 65",
+            min: 51,
+            max: 65,
+            lead: "El evaluado que se ubica en el nivel 3, además de lo descrito en los niveles 1 y 2, interpreta información de textos al inferir contenidos implícitos y reconocer estructuras, estrategias discursivas y juicios valorativos, también demuestra que:",
+            descriptors: [
+              "Jerarquiza la información presente en un texto.",
+              "Infiere información implícita en textos continuos y discontinuos.",
+              "Establece relaciones intertextuales: definición, causa-efecto, oposición y antecedente-consecuente, entre textos presentes.",
+              "Relaciona marcadores textuales en la interpretación de textos.",
+              "Reconoce la intención comunicativa del texto.",
+              "Reconoce la función de figuras literarias.",
+              "Identifica el uso del lenguaje en contexto.",
+              "Analiza y sintetiza la información contenida en un texto.",
+              "Identifica la estructura sintáctica en textos discontinuos.",
+              "Establece la validez de argumentos en un texto."
+            ]
+          },
+          {
+            level: 4,
+            code: "4",
+            name: "Nivel 4",
+            tag: "Avanzado",
+            range: "66 a 100",
+            min: 66,
+            max: 100,
+            lead: "El evaluado que se ubica en el nivel 4, además de lo descrito en los niveles 1, 2 y 3, reflexiona a partir de un texto sobre la visión de mundo del autor (costumbres, creencias, juicios, carácter ideológico-político y posturas éticas, entre otros). Asimismo, da cuenta de elementos paratextuales significativos presentes en el texto. Finalmente, valora y contrasta los elementos mencionados, también demuestra que:",
+            descriptors: [
+              "Propone soluciones a problemas de interpretación que subyacen en un texto.",
+              "Evalúa contenidos, estrategias discursivas y argumentativas presentes en un texto.",
+              "Relaciona información de dos o más textos o fragmentos de texto para llegar a una conclusión.",
+              "Aplica conceptos de análisis literario para caracterizar diferentes elementos en un texto.",
+              "Reconoce los contextos como elementos importantes en la valoración de un texto.",
+              "Selecciona elementos locales y construye argumentos que sustentan una tesis con base en textos relacionados.",
+              "Asume una postura crítica frente a los planteamientos de un texto.",
+              "Plantea hipótesis de lectura a partir de las ideas presentes en un texto."
+            ]
+          }
+        ]
+      },
+      matematicas: {
+        title: "📐 Prueba Matemáticas",
+        isMcer: false,
+        climberPositions: [
+          { x: 140, y: 255 }, // Step 1
+          { x: 195, y: 177 }, // Step 2
+          { x: 250, y: 99 },  // Step 3
+          { x: 305, y: 21 }   // Step 4
+        ],
+        levels: [
+          {
+            level: 1,
+            code: "1",
+            name: "Nivel 1",
+            tag: "Insuficiente",
+            range: "0 a 35",
+            min: 0,
+            max: 35,
+            lead: "El evaluado que se ubica en el nivel 1, demuestra que:",
+            descriptors: [
+              "Lee información puntual (un dato, por ejemplo) relacionada con situaciones cotidianas y presentada en tablas o gráficas con escala explícita, cuadrícula o, por lo menos, líneas horizontales."
+            ]
+          },
+          {
+            level: 2,
+            code: "2",
+            name: "Nivel 2",
+            tag: "Mínimo",
+            range: "36 a 50",
+            min: 36,
+            max: 50,
+            lead: "El evaluado que se ubica en el nivel 2, además de lo descrito en el nivel 1, demuestra que:",
+            descriptors: [
+              "Compara datos de dos variables presentadas en una misma gráfica sin necesidad de hacer operaciones aritméticas.",
+              "Identifica valores o puntos representativos en diferentes tipos de registro a partir del significado que tienen en la situación.",
+              "Compara la probabilidad de eventos simples (casos favorables/casos posibles) cuando los casos posibles son los mismos en ambos eventos y en contextos similares a los presentados en el aula.",
+              "Toma decisiones sobre la veracidad o falsedad de una afirmación cuando esta se puede explicar verbalizando la lectura directa que se hace de la información.",
+              "Cambia gráficas de barras a tablas de doble entrada.",
+              "Reconoce e interpreta, según el contexto, el significado de promedio simple, moda, mayor, menor, máximo y mínimo."
+            ]
+          },
+          {
+            level: 3,
+            code: "3",
+            name: "Nivel 3",
+            tag: "Satisfactorio",
+            range: "51 a 70",
+            min: 51,
+            max: 70,
+            lead: "El evaluado que se ubica en el nivel 3, además de lo descrito en los niveles 1 y 2, demuestra que:",
+            descriptors: [
+              "Selecciona la gráfica (que puede ser de doble entrada correspondiente a la información de una tabla, o a partir de verbalizaciones (características de crecimiento o decrecimiento deseadas), teniendo en cuenta para la selección la escala, el tipo de variable y el tipo de gráfica.",
+              "Compara información gráfica que requiere algunas manipulaciones aritméticas.",
+              "Señala información representada en formatos no convencionales (mapas o infografías).",
+              "Reconoce errores ocurridos al realizar una trasformación entre diferentes tipos de registro.",
+              "Reconoce desarrollos planos de una forma tridimensional y viceversa.",
+              "Compara la probabilidad de eventos simples en diversos contextos (casos favorables/casos posibles), incluso cuando los casos posibles de cada evento son diferentes.",
+              "Selecciona información necesaria para resolver problemas que involucran operaciones aritméticas.",
+              "Selecciona información necesaria para resolver problemas que involucran características medibles de figuras geométricas elementales (triángulos, cuadriláteros y circunferencias).",
+              "Cambia la escala cuando la trasformación no es convencional.",
+              "Justifica afirmaciones utilizando planteamientos y operaciones aritméticas o haciendo uso directo de un concepto, es decir, a partir de un único argumento.",
+              "Identifica información relevante cuando el tipo de registro contiene información de más de tres categorías.",
+              "Hace manipulaciones algebraicas sencillas (aritmética de términos semejantes)."
+            ]
+          },
+          {
+            level: 4,
+            code: "4",
+            name: "Nivel 4",
+            tag: "Avanzado",
+            range: "71 a 100",
+            min: 71,
+            max: 100,
+            lead: "El evaluado que se ubica en el nivel 4, además de lo descrito en los niveles 1, 2 y 3, demuestra que:",
+            descriptors: [
+              "Resuelve problemas que requieren interpretar información de eventos dependientes.",
+              "Realiza transformaciones de subconjuntos de información que pueden requerir el uso de operaciones complejas (cálculos de porcentajes).",
+              "Resuelve problemas que requieren construir una representación auxiliar (gráficas y fórmulas) como paso intermedio para su solución.",
+              "Modela usando lenguaje algebraico información dada en lenguaje natural, tablas o representaciones geométricas.",
+              "Manipula expresiones algebraicas o aritméticas haciendo uso de las propiedades de las operaciones.",
+              "Modela fenómenos variacionales no explícitos haciendo uso de lenguaje simbólico o gráficas.",
+              "Reconoce en diferentes formatos (árboles, listas o diagramas) el espacio muestral de un experimento aleatorio.",
+              "Resuelve problemas de conteo que requieren el uso de permutaciones.",
+              "Justifica si hay falta de información en una situación problema para tomar una decisión.",
+              "Toma decisiones sobre la veracidad o falsedad de una afirmación cuando requiere el uso de varias propiedades o conceptualizaciones formales."
+            ]
+          }
+        ]
+      },
+      ciencias: {
+        title: "🔬 Prueba Ciencias Naturales",
+        isMcer: false,
+        climberPositions: [
+          { x: 140, y: 255 }, // Step 1
+          { x: 195, y: 177 }, // Step 2
+          { x: 250, y: 99 },  // Step 3
+          { x: 305, y: 21 }   // Step 4
+        ],
+        levels: [
+          {
+            level: 1,
+            code: "1",
+            name: "Nivel 1",
+            tag: "Insuficiente",
+            range: "0 a 40",
+            min: 0,
+            max: 40,
+            lead: "El evaluado que se ubica en el nivel 1, demuestra que:",
+            descriptors: [
+              "Reconoce información explícita, presentada de manera ordenada en tablas o gráficas, con un lenguaje cotidiano y que implica la lectura de una sola variable independiente."
+            ]
+          },
+          {
+            level: 2,
+            code: "2",
+            name: "Nivel 2",
+            tag: "Mínimo",
+            range: "41 a 55",
+            min: 41,
+            max: 55,
+            lead: "El evaluado que se ubica en el nivel 2, además de lo descrito en el nivel 1, reconoce información suministrada en tablas, gráficas y esquemas de una sola variable independiente, y la asocia con nociones de los conceptos básicos de las ciencias naturales (tiempo, posición, velocidad, imantación y filtración), también demuestra que:",
+            descriptors: [
+              "Identifica patrones y características a partir de información presentada en textos, gráficas y tablas.",
+              "Relaciona esquemas con nociones básicas del conocimiento científico.",
+              "Establece predicciones a partir de datos presentados en tablas, gráficas y esquemas en donde se presentan patrones claramente crecientes o decrecientes.",
+              "Ordena datos e información en gráficas y tablas."
+            ]
+          },
+          {
+            level: 3,
+            code: "3",
+            name: "Nivel 3",
+            tag: "Satisfactorio",
+            range: "56 a 70",
+            min: 56,
+            max: 70,
+            lead: "El evaluado que se ubica en el nivel 3, además de lo descrito en los niveles 1 y 2, interrelaciona conceptos, leyes y teorías científicas con información presentada en diversos contextos, en los que intervienen dos o más variables, para hacer inferencias sobre una situación problema o un fenómeno natural, también demuestra que:",
+            descriptors: [
+              "Establece relaciones de causa-efecto usando conceptos, leyes y teorías científicas.",
+              "Interpreta gráficas, tablas y modelos para hacer predicciones.",
+              "Establece relaciones entre conceptos, leyes y teorías científicas con diseños experimentales y sus resultados.",
+              "Diferencia entre evidencias y conclusiones.",
+              "Plantea hipótesis basadas en evidencias.",
+              "Relaciona variables para explicar algunos fenómenos naturales."
+            ]
+          },
+          {
+            level: 4,
+            code: "4",
+            name: "Nivel 4",
+            tag: "Avanzado",
+            range: "71 a 100",
+            min: 71,
+            max: 100,
+            lead: "El evaluado que se ubica en el nivel 4, además de lo descrito en los niveles 1, 2 y 3, usa conceptos, teorías o leyes en la solución de situaciones problema que involucran procedimientos, habilidades, conocimientos y un lenguaje propio de las ciencias naturales, también demuestra que:",
+            descriptors: [
+              "Plantea preguntas de investigación desde las ciencias naturales a partir de un contexto determinado.",
+              "Establece conclusiones derivadas de una investigación.",
+              "Contrasta modelos de las ciencias naturales con fenómenos cotidianos.",
+              "Resuelve situaciones problema haciendo uso de conceptos, leyes y teorías de las ciencias naturales.",
+              "Comunica resultados de procesos de investigación científica.",
+              "Analiza fenómenos naturales con base en los procedimientos propios de la investigación científica."
+            ]
+          }
+        ]
+      },
+      sociales: {
+        title: "🏛️ Prueba Sociales y Ciudadanas",
+        isMcer: false,
+        climberPositions: [
+          { x: 140, y: 255 }, // Step 1
+          { x: 195, y: 177 }, // Step 2
+          { x: 250, y: 99 },  // Step 3
+          { x: 305, y: 21 }   // Step 4
+        ],
+        levels: [
+          {
+            level: 1,
+            code: "1",
+            name: "Nivel 1",
+            tag: "Insuficiente",
+            range: "0 a 40",
+            min: 0,
+            max: 40,
+            lead: "El evaluado que se ubica en el nivel 1, demuestra que:",
+            descriptors: [
+              "Reconoce algunos derechos ciudadanos en situaciones sencillas.",
+              "Reconoce factores que generan un conflicto.",
+              "Identifica creencias que explican algunos comportamientos."
+            ]
+          },
+          {
+            level: 2,
+            code: "2",
+            name: "Nivel 2",
+            tag: "Mínimo",
+            range: "41 a 55",
+            min: 41,
+            max: 55,
+            lead: "El evaluado que se ubica en el nivel 2, además de lo descrito en el nivel 1, reconoce deberes del Estado colombiano y situaciones de protección o vulneración de derechos en el marco del Estado social de derecho, también demuestra que:",
+            descriptors: [
+              "Identifica relaciones entre conductas de las personas y sus cosmovisiones.",
+              "Reconoce las dimensiones presentes en una situación, problema, decisión tomada o propuesta de solución. Además, contextualiza fuentes y procesos sociales.",
+              "Identifica derechos ciudadanos y deberes del Estado establecidos en la Constitución Política de Colombia.",
+              "Relaciona la conducta de una persona con su cosmovisión o forma de entender el mundo.",
+              "Reconoce los efectos de una solución y las dimensiones que privilegia.",
+              "Identifica contextos o procesos en los que se inscribe una fuente o evento."
+            ]
+          },
+          {
+            level: 3,
+            code: "3",
+            name: "Nivel 3",
+            tag: "Satisfactorio",
+            range: "56 a 70",
+            min: 56,
+            max: 70,
+            lead: "El evaluado que se ubica en el nivel 3, además de lo descrito en los niveles 1 y 2, identifica prejuicios o intenciones contenidos en una afirmación y reconoce las dimensiones e intereses involucrados en un problema o alternativa de solución. Asimismo, identifica algunos conceptos básicos de las ciencias sociales y modelos conceptuales, también demuestra que:",
+            descriptors: [
+              "Valora y contextualiza la información presentada en una fuente.",
+              "Reconoce intenciones y prejuicios, así como argumentos similares o diferentes dados en un contexto o una situación específica.",
+              "Identifica dimensiones (económicas, políticas, culturales, ambientales, etc.) involucradas en situaciones, problemáticas o propuestas de solución.",
+              "Identifica y compara opiniones e intereses de diferentes actores involucrados en una situación problemática y establece relaciones entre esas posturas y posibles soluciones.",
+              "Reconoce algunos conceptos básicos de las ciencias sociales.",
+              "Identifica supuestos y usos de algunos modelos conceptuales.",
+              "Relaciona contextos históricos y/o geográficos con fuentes, situaciones y prácticas sociales.",
+              "Valora la información contenida en una fuente y reconoce sus alcances."
+            ]
+          },
+          {
+            level: 4,
+            code: "4",
+            name: "Nivel 4",
+            tag: "Avanzado",
+            range: "71 a 100",
+            min: 71,
+            max: 100,
+            lead: "El evaluado que se ubica en el nivel 4, además de lo descrito en los niveles 1, 2 y 3, demuestra que:",
+            descriptors: [
+              "Conoce los procedimientos de reforma a la Constitución Política de Colombia, los mecanismos de participación ciudadana y las funciones de los organismos de control.",
+              "Compara enunciados o argumentos, así como intereses y posiciones de actores en contextos en los que se discuten situaciones problemáticas o sus alternativas de solución.",
+              "Relaciona propuestas de solución a un problema con su contexto de implementación o con sus posibles impactos en ciertas dimensiones (económicas, políticas, culturales, ambientales, etc.).",
+              "Entiende problemáticas, eventos o procesos sociales a partir del uso de conceptos básicos de las ciencias sociales o a partir de contextos históricos y/o geográficos.",
+              "Analiza fuentes (primarias y secundarias) para valorar inferencias o identificar intenciones, características de los actores involucrados y contextos en los que se ubican dichas fuentes.",
+              "Establece relaciones entre modelos conceptuales y fuentes que los abordan o decisiones sociales que los aplican."
+            ]
+          }
+        ]
+      },
+      ingles: {
+        title: "🌐 Prueba Inglés (Alineación Marco Común Europeo MCER)",
+        isMcer: true,
+        climberPositions: [
+          { x: 140, y: 255 }, // Step 1
+          { x: 195, y: 177 }, // Step 2
+          { x: 250, y: 99 },  // Step 3
+          { x: 305, y: 21 }   // Step 4
+        ],
+        levels: [
+          {
+            level: 1,
+            code: "Pre A1",
+            name: "Nivel Pre A1",
+            tag: "Bajo Principiante",
+            range: "0 a 36",
+            min: 0,
+            max: 36,
+            lead: "El evaluado que se ubica en el nivel Pre A1, reconoce y comprende información simple e identifica vocabulario básico de su entorno, también demuestra que:",
+            descriptors: [
+              "Comprende oraciones, preguntas, instrucciones o conversaciones cuando se utiliza vocabulario simple.",
+              "Identifica palabras simples en frases sencillas que incluyen personas o lugares que le son familiares en su cotidianidad."
+            ]
+          },
+          {
+            level: 2,
+            code: "A1",
+            name: "Nivel A1",
+            tag: "Acceso Elemental",
+            range: "37 a 57",
+            min: 37,
+            max: 57,
+            lead: "El evaluado que se ubica en el nivel A1, además de lo descrito en el nivel Pre A1, comprende enunciados simples relacionados con situaciones comunicativas sencillas y cotidianas, que incluyen la interpretación y la descripción de su entorno, también demuestra que:",
+            descriptors: [
+              "Identifica el uso de lenguaje básico para proporcionar información personal, saludos, despedidas, indicaciones de lugares y acciones del presente.",
+              "Entiende información e indicaciones que encuentra en avisos de acuerdo con el contexto donde se aplica."
+            ]
+          },
+          {
+            level: 3,
+            code: "A2",
+            name: "Nivel A2",
+            tag: "Plataforma Básica",
+            range: "58 a 70",
+            min: 58,
+            max: 70,
+            lead: "El evaluado que se ubica en el nivel A2, además de lo descrito en los niveles Pre A1 y A1, comprende información específica en textos informativos y descriptivos sencillos, también demuestra que:",
+            descriptors: [
+              "Comprende textos que abordan temáticas relacionadas con sus contextos inmediatos, tales como ocupaciones, personas, objetos, lugares o situaciones familiares.",
+              "Identifica vocabulario simple en textos cortos que narran acciones o eventos presentes, pasados o futuros.",
+              "Interpreta enunciados que expresan puntos de vista particulares en una situación comunicativa simple.",
+              "Identifica y comprende información literal o parafraseada en textos cortos."
+            ]
+          },
+          {
+            level: 4,
+            code: "B1",
+            name: "Nivel B1",
+            tag: "Umbral / Estándar MEN",
+            range: "71 a 100",
+            min: 71,
+            max: 100,
+            lead: "El evaluado que se ubica en el nivel B1, además de lo descrito en los niveles Pre A1, A1 y A2, posee vocabulario y estructuras del lenguaje que le permiten inferir y comprender un mayor rango de textos que abarcan temáticas de diferentes campos, también demuestra que:",
+            descriptors: [
+              "Comprende textos sobre temas generales y específicos en ámbitos como el laboral, académico, cultural y personal.",
+              "Infiere el significado de palabras desconocidas a partir del contexto dado.",
+              "Identifica puntos de vista como sentimientos, deseos e intenciones en escritos determinados."
+            ]
+          }
+        ]
+      }
+    };
+
+    // Paletas de color para escalones
+    const STEP_COLORS = [
+      { front: '#e11d48', top: '#fb7185', side: '#be123c', text: '#ffffff' }, // Nivel 1 (Rojo)
+      { front: '#ea580c', top: '#fb923c', side: '#c2410c', text: '#ffffff' }, // Nivel 2 (Naranja)
+      { front: '#eab308', top: '#fde047', side: '#ca8a04', text: '#ffffff' }, // Nivel 3 (Amarillo)
+      { front: '#10b981', top: '#34d399', side: '#059669', text: '#ffffff' }  // Nivel 4 (Verde)
+    ];
+
+    const GRAY_STEP_COLOR = {
+      front: '#94a3b8',
+      top: '#cbd5e1',
+      side: '#64748b',
+      text: 'rgba(255,255,255,0.7)'
+    };
+
+    let currentLevelsArea = 'lectura';
+    let currentSelectedLevelIndex = 2; // Nivel 3 por defecto
+    let isCumulativeViewOpen = false;
+
+    // Cambiar de área
+    function switchLevelsArea(areaKey) {
+      if (!ICFES_LEVELS_DATA[areaKey]) return;
+      currentLevelsArea = areaKey;
+
+      // Actualizar pestañas
+      document.querySelectorAll('.area-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('tab-' + areaKey);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Actualizar título
+      document.getElementById('staircase-area-title').innerHTML = ICFES_LEVELS_DATA[areaKey].title;
+
+      // Actualizar textos de los 4 callouts SVG y botones rápidos
+      const areaData = ICFES_LEVELS_DATA[areaKey];
+      for (let i = 0; i < 4; i++) {
+        const lvl = areaData.levels[i];
+        
+        // Callout SVG
+        const calloutTextEl = document.getElementById('svg-callout-text-' + i);
+        if (calloutTextEl) calloutTextEl.textContent = lvl.range + ' pts';
+
+        // Número / Código en SVG
+        const svgNumEl = document.getElementById('svg-num-' + i);
+        if (svgNumEl) {
+          svgNumEl.textContent = lvl.code;
+          if (lvl.code.length > 2) {
+            svgNumEl.setAttribute('font-size', '20');
+          } else {
+            svgNumEl.setAttribute('font-size', '34');
+          }
+        }
+
+        // Botón rápido
+        const qcodeEl = document.getElementById('qcode-' + i);
+        const qrangeEl = document.getElementById('qrange-' + i);
+        if (qcodeEl) qcodeEl.textContent = lvl.code;
+        if (qrangeEl) qrangeEl.textContent = lvl.range;
+      }
+
+      // Renderizar nivel seleccionado
+      selectStairLevel(currentSelectedLevelIndex);
+
+      // Actualizar simulador
+      const currentScore = parseInt(document.getElementById('sim-score-slider').value) || 62;
+      updateSimulatorFeedback(currentScore);
+    }
+
+    // Seleccionar nivel en la escalera
+    function selectStairLevel(index) {
+      currentSelectedLevelIndex = index;
+      const areaData = ICFES_LEVELS_DATA[currentLevelsArea];
+
+      // Actualizar botones rápidos
+      for (let i = 0; i < 4; i++) {
+        const btn = document.getElementById('qbtn-' + i);
+        if (btn) {
+          if (i === index) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      }
+
+      // Actualizar la escalera SVG con el EFECTO ACUMULATIVO DEL ICFES:
+      // Los niveles <= index se colorean. Los niveles > index se muestran en gris tenue
+      for (let i = 0; i < 4; i++) {
+        const groupEl = document.getElementById('svg-step-' + i);
+        const frontPoly = document.getElementById('front-poly-' + i);
+        const topPoly = document.getElementById('top-poly-' + i);
+        const sidePoly = document.getElementById('side-poly-' + i);
+        const svgNum = document.getElementById('svg-num-' + i);
+
+        if (i <= index) {
+          // Color oficial activo
+          const col = STEP_COLORS[i];
+          if (frontPoly) frontPoly.setAttribute('fill', col.front);
+          if (topPoly) topPoly.setAttribute('fill', col.top);
+          if (sidePoly) sidePoly.setAttribute('fill', col.side);
+          if (svgNum) svgNum.setAttribute('fill', col.text);
+        } else {
+          // Gris inactivo
+          if (frontPoly) frontPoly.setAttribute('fill', GRAY_STEP_COLOR.front);
+          if (topPoly) topPoly.setAttribute('fill', GRAY_STEP_COLOR.top);
+          if (sidePoly) sidePoly.setAttribute('fill', GRAY_STEP_COLOR.side);
+          if (svgNum) svgNum.setAttribute('fill', GRAY_STEP_COLOR.text);
+        }
+
+        if (groupEl) {
+          if (i === index) groupEl.classList.add('active');
+          else groupEl.classList.remove('active');
+        }
+      }
+
+      // Mover el avatar del estudiante climber en el SVG
+      const climberPin = document.getElementById('svg-climber-pin');
+      if (climberPin && areaData.climberPositions && areaData.climberPositions[index]) {
+        const pos = areaData.climberPositions[index];
+        climberPin.setAttribute('transform', `translate(${pos.x}, ${pos.y})`);
+      }
+
+      // Renderizar panel de descriptores cualitativos
+      renderQualitativeDetail(index);
+    }
+
+    // Renderizar panel cualitativo
+    function renderQualitativeDetail(index) {
+      const areaData = ICFES_LEVELS_DATA[currentLevelsArea];
+      const lvl = areaData.levels[index];
+      if (!lvl) return;
+
+      const badgeEl = document.getElementById('qual-level-badge');
+      badgeEl.className = `level-badge-pill lvl-color-${lvl.level}`;
+      badgeEl.textContent = `${lvl.name.toUpperCase()} · ${lvl.tag.toUpperCase()}`;
+
+      document.getElementById('qual-range-badge').textContent = `Puntaje Oficial: ${lvl.range} Pts`;
+      document.getElementById('official-lead-box').textContent = lvl.lead;
+
+      // Lista de descriptores
+      const listEl = document.getElementById('descriptors-scrollable-list');
+      listEl.innerHTML = '';
+      lvl.descriptors.forEach(desc => {
+        const item = document.createElement('div');
+        item.className = 'descriptor-row-item';
+        item.innerHTML = `
+          <span class="descriptor-arrow-icon">»</span>
+          <span>${desc}</span>
+        `;
+        listEl.appendChild(item);
+      });
+
+      document.getElementById('descriptors-counter').textContent = `${lvl.descriptors.length} Descriptor${lvl.descriptors.length > 1 ? 'es Demostrados' : ' Demostrado'}`;
+
+      // Actualizar contenido inclusivo
+      updateInclusiveDetails(index);
+    }
+
+    // Alternar vista inclusiva
+    function toggleCumulativeView() {
+      isCumulativeViewOpen = !isCumulativeViewOpen;
+      const box = document.getElementById('inclusive-details-box');
+      const btn = document.getElementById('btn-inclusive-toggle');
+      if (isCumulativeViewOpen) {
+        box.style.display = 'block';
+        btn.innerHTML = '<span>✕</span> Ocultar Efecto Inclusivo';
+        btn.style.background = '#fef3c7';
+      } else {
+        box.style.display = 'none';
+        btn.innerHTML = '<span>🔗</span> Ver Efecto Inclusivo';
+        btn.style.background = '#ffffff';
+      }
+    }
+
+    // Actualizar lista acumulativa
+    function updateInclusiveDetails(index) {
+      const areaData = ICFES_LEVELS_DATA[currentLevelsArea];
+      const listEl = document.getElementById('inclusive-details-list');
+      if (index === 0) {
+        listEl.innerHTML = '<em>Este es el nivel basal de la prueba. No posee niveles inferiores acumulados.</em>';
+        return;
+      }
+
+      let html = '<ul style="margin: 6px 0 0; padding-left: 18px;">';
+      for (let i = 0; i < index; i++) {
+        const prevLvl = areaData.levels[i];
+        html += `<li><strong>${prevLvl.name} (${prevLvl.tag}):</strong> ${prevLvl.descriptors[0].substring(0, 95)}...</li>`;
+      }
+      html += '</ul>';
+      listEl.innerHTML = html;
+    }
+
+    // Cambiar valor desde slider
+    function onSimulatorScoreChange(val) {
+      const score = parseInt(val);
+      document.getElementById('sim-score-display').textContent = score;
+      updateSimulatorFeedback(score);
+    }
+
+    // Establecer puntaje desde botones de preset
+    function setSimulatorScore(scoreVal) {
+      document.getElementById('sim-score-slider').value = scoreVal;
+      document.getElementById('sim-score-display').textContent = scoreVal;
+      updateSimulatorFeedback(scoreVal);
+    }
+
+    // Actualizar feedback del simulador
+    function updateSimulatorFeedback(score) {
+      const areaData = ICFES_LEVELS_DATA[currentLevelsArea];
+      let matchedIdx = 0;
+
+      for (let i = 0; i < areaData.levels.length; i++) {
+        const lvl = areaData.levels[i];
+        if (score >= lvl.min && score <= lvl.max) {
+          matchedIdx = i;
+          break;
+        }
+      }
+
+      const currentLvl = areaData.levels[matchedIdx];
+      const badgeEl = document.getElementById('sim-badge');
+      badgeEl.className = `sim-feedback-level-badge lvl-color-${currentLvl.level}`;
+      badgeEl.textContent = `${currentLvl.name} · ${currentLvl.tag}`;
+
+      const headlineEl = document.getElementById('sim-headline');
+      const gapDescEl = document.getElementById('sim-gap-desc');
+
+      if (matchedIdx === 3) {
+        headlineEl.textContent = '¡Cúspide de Excelencia Alcanzada!';
+        gapDescEl.innerHTML = `El estudiante se ubica en el rango superior (<strong>${currentLvl.range} pts</strong>). Ha superado todos los niveles y consolida competencias complejas con pensamiento crítico.`;
+      } else {
+        const nextLvl = areaData.levels[matchedIdx + 1];
+        const ptsNeeded = nextLvl.min - score;
+        headlineEl.textContent = `Diagnóstico: ${currentLvl.tag}`;
+        gapDescEl.innerHTML = `Puntaje en <strong>${currentLvl.name}</strong> (${currentLvl.range} pts). Le faltan <strong>${ptsNeeded} punto${ptsNeeded > 1 ? 's' : ''}</strong> para dar el salto al <strong>${nextLvl.name} (${nextLvl.tag})</strong>.`;
+      }
+
+      // Sincronizar escalera con el nivel diagnosticado
+      selectStairLevel(matchedIdx);
+    }
+
+    // Inicialización del módulo
+    function initLevelsModule() {
+      switchLevelsArea('lectura');
+    }
+
 
     // BASE DE CONOCIMIENTO TÉCNICO DCE (GUÍAS DE ORIENTACIÓN SABER 11 & SABER 9/10)
     // Estructura oficial ICFES: Área -> Componentes -> Competencias -> Afirmaciones -> Evidencias
@@ -2660,6 +4178,7 @@
       showAreaMatrix('mat');
       loadXRayExample(11);
       // Inicializar el flujo reactivo del generador de planes de choque
+      initLevelsModule();
       onAreaChange();
     });
 
