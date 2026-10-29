@@ -191,67 +191,92 @@
       border-radius: var(--radius-pill);
     }
 
-    /* BARRA DE PESTAÑAS HORIZONTALES (DASHBOARD) */
+    /* BARRA DE BOTONES DE NAVEGACIÓN PERMANENTE (SIEMPRE VISIBLE / STICKY) */
     .module-nav-bar {
-      background: #ffffff;
-      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1.5px solid var(--line);
       position: sticky;
-      top: 61px;
-      z-index: 100;
-      box-shadow: var(--shadow-sm);
+      top: 56px;
+      z-index: 180;
+      box-shadow: 0 4px 20px rgba(13, 21, 40, 0.08);
+      padding: 8px 0;
+      transition: all 0.2s ease;
     }
 
     .module-nav-container {
-      max-width: 1600px;
+      max-width: 1440px;
       margin: 0 auto;
-      padding: 0 max(3vw, 24px);
+      padding: 0 16px;
       display: flex;
-      gap: 4px;
-      overflow-x: auto;
-      scrollbar-width: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
-    .module-nav-container::-webkit-scrollbar { display: none; }
 
     .module-tab-btn {
-      padding: 14px 18px;
-      background: transparent;
-      border: none;
-      border-bottom: 3px solid transparent;
+      padding: 7px 14px;
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: var(--radius-pill);
       font-family: inherit;
-      font-size: 0.84rem;
+      font-size: 0.80rem;
       font-weight: 700;
-      color: var(--muted);
+      color: #334155;
       cursor: pointer;
       white-space: nowrap;
-      transition: var(--transition);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
     }
 
     .module-tab-btn:hover {
       color: var(--blue);
-      background: var(--paper);
+      border-color: var(--blue);
+      background: #f8faff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(13, 57, 248, 0.12);
     }
 
     .module-tab-btn.active {
-      color: var(--blue);
-      border-bottom-color: var(--blue);
-      background: rgba(13, 57, 248, 0.03);
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      border-color: transparent;
+      box-shadow: 0 4px 14px var(--cyan-glow);
+      transform: translateY(-1px);
     }
 
-    .module-tab-badge {
-      font-size: 0.68rem;
+    .nav-pill-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.72rem;
       font-weight: 800;
-      padding: 2px 7px;
-      border-radius: var(--radius-pill);
-      background: var(--paper);
-      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
     }
 
-    .module-tab-btn.active .module-tab-badge {
-      background: var(--blue-subtle);
+    .module-tab-btn:hover .nav-pill-num {
+      background: #e0e7ff;
       color: var(--blue);
+    }
+
+    .module-tab-btn.active .nav-pill-num {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    .nav-pill-label {
+      font-weight: 700;
+      letter-spacing: -0.01em;
     }
 
     /* CONTENEDOR PRINCIPAL Y SECCIONES */
@@ -1755,6 +1780,11 @@
       gap: 16px;
       font-size: 0.82rem;
     }
+  
+    @keyframes fadeInModule {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -1770,24 +1800,10 @@
       </div>
 
       <div style="display: flex; align-items: center; gap: 14px;">
-        <!-- Selector de Modo: Dashboard vs Diapositivas -->
-        <div class="view-mode-toggles">
-          <button class="mode-btn active" id="btn-mode-dashboard" onclick="setMode('dashboard')">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            Dashboard
-          </button>
-          <button class="mode-btn" id="btn-mode-presentation" onclick="setMode('presentation')">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-            Modo Presentación
-          </button>
-        </div>
-
-        <!-- Navegación de Diapositivas (activa en modo presentación) -->
-        <div class="presentation-nav" id="pres-nav-controls">
-          <button class="pres-btn" onclick="prevSlide()" title="Diapositiva anterior (Flecha Izquierda)">←</button>
-          <span class="pres-counter" id="pres-slide-num">1 / 6</span>
-          <button class="pres-btn" onclick="nextSlide()" title="Diapositiva siguiente (Flecha Derecha / Espacio)">→</button>
-        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 0.78rem; font-weight: 800; color: rgba(255, 255, 255, 0.7); background: rgba(255, 255, 255, 0.08); padding: 5px 14px; border-radius: var(--radius-pill); border: 1px solid rgba(255, 255, 255, 0.12);">
+          📌 Navegación por Módulos
+        </span>
       </div>
     </div>
   </header>
@@ -1795,29 +1811,29 @@
   <!-- BARRA DE PESTAÑAS HORIZONTALES (DASHBOARD) -->
   <nav class="module-nav-bar" id="module-nav-bar">
     <div class="module-nav-container">
-      <button class="module-tab-btn active" onclick="jumpToModule(0)">
-        <span>1. Ruta Gradual Comercial</span>
-        <span class="module-tab-badge">4 Fases · Portadas</span>
+      <button class="module-tab-btn active" id="nav-btn-0" onclick="jumpToModule(0)" title="1. Ruta Progresiva de Simulacros (Comercial y Directivos)">
+        <span class="nav-pill-num">1</span>
+        <span class="nav-pill-label">Ruta Comercial</span>
       </button>
-      <button class="module-tab-btn" onclick="jumpToModule(1)">
-        <span>2. Desglose Saber 11°</span>
-        <span class="module-tab-badge">254 Ítems</span>
+      <button class="module-tab-btn" id="nav-btn-1" onclick="jumpToModule(1)" title="2. Desglose Técnico Saber 11° (254 Ítems por Área)">
+        <span class="nav-pill-num">2</span>
+        <span class="nav-pill-label">Desglose Saber 11°</span>
       </button>
-      <button class="module-tab-btn" onclick="jumpToModule(2)">
-        <span>3. Competencias & Dificultad</span>
-        <span class="module-tab-badge">Selector por Prueba</span>
+      <button class="module-tab-btn" id="nav-btn-2" onclick="jumpToModule(2)" title="3. Competencias y Dificultad psicométrica por Prueba">
+        <span class="nav-pill-num">3</span>
+        <span class="nav-pill-label">Competencias</span>
       </button>
-      <button class="module-tab-btn" onclick="jumpToModule(3)">
-        <span>4. Desestructuración DCE (Rayos X)</span>
-        <span class="module-tab-badge">3 Grados · Conectores</span>
+      <button class="module-tab-btn" id="nav-btn-3" onclick="jumpToModule(3)" title="4. Desestructuración DCE (Rayos X y Análisis de Sesgos)">
+        <span class="nav-pill-num">4</span>
+        <span class="nav-pill-label">Rayos X (DCE)</span>
       </button>
-      <button class="module-tab-btn" onclick="jumpToModule(4)">
-        <span>5. Niveles & MCER Inglés</span>
-        <span class="module-tab-badge">A- a B+</span>
+      <button class="module-tab-btn" id="nav-btn-4" onclick="jumpToModule(4)" title="5. Niveles de Desempeño Saber 11° y MCER Inglés">
+        <span class="nav-pill-num">5</span>
+        <span class="nav-pill-label">Niveles Saber</span>
       </button>
-      <button class="module-tab-btn" onclick="jumpToModule(5)">
-        <span>6. Planes de Choque en Aula</span>
-        <span class="module-tab-badge">Auto-población DCE</span>
+      <button class="module-tab-btn" id="nav-btn-5" onclick="jumpToModule(5)" title="6. Planes de Choque en Aula (DCE y Guías de Orientación)">
+        <span class="nav-pill-num">6</span>
+        <span class="nav-pill-label">Planes de Choque</span>
       </button>
     </div>
   </nav>
@@ -1848,35 +1864,10 @@
           
           <!-- Galería de Portadas de Libros -->
           <div class="route-books-gallery">
-            <!-- Portada Oficial de Dzeta 10° (Vectorial de Alta Fidelidad) -->
+            <!-- Portada Oficial de Dzeta 10° -->
             <div class="book-cover-item" title="Simulacro Dzeta 10.° (Diagnóstico Base)">
-              <div class="book-cover-img-wrap" style="background: linear-gradient(145deg, #062b1e 0%, #0d4a36 45%, #051610 100%);">
-                <svg viewBox="0 0 160 220" width="100%" height="100%" style="display: block;">
-                  <defs>
-                    <linearGradient id="zetaGrad" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#34d399"/>
-                      <stop offset="100%" stop-color="#10b981"/>
-                    </linearGradient>
-                  </defs>
-                  <!-- Header badge -->
-                  <rect x="12" y="12" width="60" height="15" rx="7.5" fill="#10b981" />
-                  <text x="42" y="23" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="800" fill="#042f21" text-anchor="middle">10.° GRADO</text>
-                  <circle cx="138" cy="19" r="6" fill="rgba(255,255,255,0.15)"/>
-                  <text x="138" y="22" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="800" fill="#34d399" text-anchor="middle">1</text>
-                  <!-- Letra Griega Zeta estilizada -->
-                  <text x="80" y="98" font-family="'Plus Jakarta Sans', sans-serif" font-size="64" font-weight="900" fill="url(#zetaGrad)" text-anchor="middle" opacity="0.95">Ζ</text>
-                  <!-- Título Dzeta -->
-                  <text x="80" y="128" font-family="'Plus Jakarta Sans', sans-serif" font-size="18" font-weight="800" fill="#ffffff" letter-spacing="1" text-anchor="middle">DZETA</text>
-                  <text x="80" y="142" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="700" fill="#a7f3d0" letter-spacing="0.5" text-anchor="middle">SABER LAB · DIAGNÓSTICO</text>
-                  <!-- Línea divisoria -->
-                  <line x1="24" y1="152" x2="136" y2="152" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.4"/>
-                  <!-- Resumen de áreas -->
-                  <rect x="24" y="160" width="112" height="28" rx="4" fill="rgba(255,255,255,0.06)"/>
-                  <text x="80" y="171" font-family="'Plus Jakarta Sans', sans-serif" font-size="6.5" font-weight="600" fill="#e2e8f0" text-anchor="middle">5 ÁREAS NUCLEARES ICFES</text>
-                  <text x="80" y="181" font-family="'JetBrains Mono', monospace" font-size="6.5" font-weight="700" fill="#34d399" text-anchor="middle">DIAGNÓSTICO & NIVELACIÓN</text>
-                  <!-- Footer institucional -->
-                  <text x="80" y="206" font-family="'Plus Jakarta Sans', sans-serif" font-size="6.5" font-weight="800" fill="#6ee7b7" letter-spacing="0.8" text-anchor="middle">GRUPO EDÚCATE COLOMBIA</text>
-                </svg>
+              <div class="book-cover-img-wrap">
+                <img src="assets/portada-dzeta-10.png" onerror="this.src='portada-dzeta-10.png'" alt="Dzeta 10°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Dzeta</span>
               <span class="book-cover-grade">Grado 10.°</span>
@@ -1885,7 +1876,7 @@
             <!-- Portada Sigma 10° -->
             <div class="book-cover-item" title="Simulacro Sigma 10.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-11.webp" onerror="this.src='assets/portada-11.webp'" alt="Sigma 10°" class="book-cover-img">
+                <img src="assets/portada-11.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-11.webp'" alt="Sigma 10°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Sigma</span>
               <span class="book-cover-grade">Grado 10.°</span>
@@ -1894,7 +1885,7 @@
             <!-- Portada Sigma 11° -->
             <div class="book-cover-item" title="Simulacro Sigma 11.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-25.webp" onerror="this.src='assets/portada-25.webp'" alt="Sigma 11°" class="book-cover-img">
+                <img src="assets/portada-25.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-25.webp'" alt="Sigma 11°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Sigma</span>
               <span class="book-cover-grade">Grado 11.°</span>
@@ -1918,21 +1909,21 @@
           <div class="route-books-gallery">
             <div class="book-cover-item" title="Simulacro Épsilon 10.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-03.webp" onerror="this.src='assets/portada-03.webp'" alt="Épsilon 10°" class="book-cover-img">
+                <img src="assets/portada-03.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-03.webp'" alt="Épsilon 10°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Épsilon</span>
               <span class="book-cover-grade">Grado 10.°</span>
             </div>
             <div class="book-cover-item" title="Simulacro Épsilon 11.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-13.webp" onerror="this.src='assets/portada-13.webp'" alt="Épsilon 11°" class="book-cover-img">
+                <img src="assets/portada-13.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-13.webp'" alt="Épsilon 11°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Épsilon</span>
               <span class="book-cover-grade">Grado 11.°</span>
             </div>
             <div class="book-cover-item" title="Simulacro Kappa 10.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-05.webp" onerror="this.src='assets/portada-05.webp'" alt="Kappa 10°" class="book-cover-img">
+                <img src="assets/portada-05.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-05.webp'" alt="Kappa 10°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Kappa</span>
               <span class="book-cover-grade">Grado 10.°</span>
@@ -1956,21 +1947,21 @@
           <div class="route-books-gallery">
             <div class="book-cover-item" title="Simulacro Kappa Premium 11.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-15.webp" onerror="this.src='assets/portada-15.webp'" alt="Kappa Premium 11°" class="book-cover-img">
+                <img src="assets/portada-15.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-15.webp'" alt="Kappa Premium 11°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Kappa Prem.</span>
               <span class="book-cover-grade">Grado 11.°</span>
             </div>
             <div class="book-cover-item" title="Simulacro Máster Pro 10.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-09.webp" onerror="this.src='assets/portada-09.webp'" alt="Máster Pro 10°" class="book-cover-img">
+                <img src="assets/portada-09.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-09.webp'" alt="Máster Pro 10°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Máster Pro</span>
               <span class="book-cover-grade">Grado 10.°</span>
             </div>
             <div class="book-cover-item" title="Simulacro Máster Pro 11.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-21.webp" onerror="this.src='assets/portada-21.webp'" alt="Máster Pro 11°" class="book-cover-img">
+                <img src="assets/portada-21.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-21.webp'" alt="Máster Pro 11°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Máster Pro</span>
               <span class="book-cover-grade">Grado 11.°</span>
@@ -1994,21 +1985,21 @@
           <div class="route-books-gallery">
             <div class="book-cover-item" title="Simulacro Máster Elite 9.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-01.webp" onerror="this.src='assets/portada-01.webp'" alt="Máster Elite 9°" class="book-cover-img">
+                <img src="assets/portada-01.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-01.webp'" alt="Máster Elite 9°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Máster Elite</span>
               <span class="book-cover-grade">Grado 9.°</span>
             </div>
             <div class="book-cover-item" title="Simulacro Máster Elite 10.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-07.webp" onerror="this.src='assets/portada-07.webp'" alt="Máster Elite 10°" class="book-cover-img">
+                <img src="assets/portada-07.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-07.webp'" alt="Máster Elite 10°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Máster Elite</span>
               <span class="book-cover-grade">Grado 10.°</span>
             </div>
             <div class="book-cover-item" title="Simulacro Máster Elite 11.°">
               <div class="book-cover-img-wrap">
-                <img src="https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-17.webp" onerror="this.src='assets/portada-17.webp'" alt="Máster Elite 11°" class="book-cover-img">
+                <img src="assets/portada-17.webp" onerror="this.src='https://catalogo-pruebas-saber.nat-pedagogia.chatgpt.site/assets/portada-17.webp'" alt="Máster Elite 11°" class="book-cover-img">
               </div>
               <span class="book-cover-title">Máster Elite</span>
               <span class="book-cover-grade">Grado 11.°</span>
@@ -2056,21 +2047,21 @@
               <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
               <td><strong>Matemáticas 1</strong></td>
               <td>25 preguntas</td>
-              <td>50 minutos</td>
+              <td>75 minutos</td>
               <td>Enfoque en Razonamiento Cuantitativo y Álgebra</td>
             </tr>
             <tr>
               <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
               <td><strong>Lectura Crítica</strong></td>
               <td>41 preguntas</td>
-              <td>85 minutos</td>
+              <td>75 minutos</td>
               <td>Textos continuos (filosóficos y literarios) y discontinuos</td>
             </tr>
             <tr>
               <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
               <td><strong>Sociales y Ciudadanas 1</strong></td>
               <td>25 preguntas</td>
-              <td>50 minutos</td>
+              <td>60 minutos</td>
               <td>Pensamiento social, Constitución Política y contexto histórico</td>
             </tr>
             <tr>
@@ -2080,17 +2071,10 @@
               <td>60 minutos</td>
               <td>Química y Biología básica / Indagación de fenómenos</td>
             </tr>
-            <tr>
-              <td><span class="badge-session">Sesión 1 (Mañana)</span></td>
-              <td><strong>Cuestionario Socioeconómico</strong></td>
-              <td>11 preguntas</td>
-              <td>15 minutos</td>
-              <td>Caracterización contextual (no afecta el puntaje global)</td>
-            </tr>
             <tr style="background: var(--paper); font-weight: 800;">
               <td><strong>Subtotal Sesión 1</strong></td>
               <td><strong>4 Pruebas Puntuables</strong></td>
-              <td><strong>131 ítems (120 puntuables)</strong></td>
+              <td><strong>120 preguntas</strong></td>
               <td><strong>4 horas y 30 minutos</strong></td>
               <td><strong>Mide frescura cognitiva y concentración matutina</strong></td>
             </tr>
@@ -2098,14 +2082,14 @@
               <td><span class="badge-session">Sesión 2 (Tarde)</span></td>
               <td><strong>Sociales y Ciudadanas 2</strong></td>
               <td>25 preguntas</td>
-              <td>50 minutos</td>
+              <td>75 minutos</td>
               <td>Análisis de perspectivas en conflicto y pensamiento sistémico</td>
             </tr>
             <tr>
               <td><span class="badge-session">Sesión 2 (Tarde)</span></td>
               <td><strong>Matemáticas 2</strong></td>
               <td>25 preguntas</td>
-              <td>50 minutos</td>
+              <td>60 minutos</td>
               <td>Geometría, trigonometría, estadística y probabilidad</td>
             </tr>
             <tr>
@@ -2119,7 +2103,7 @@
               <td><span class="badge-session">Sesión 2 (Tarde)</span></td>
               <td><strong>Inglés (Partes 1 a 7)</strong></td>
               <td>55 preguntas</td>
-              <td>80 minutos</td>
+              <td>75 minutos</td>
               <td>Desde avisos básicos (A1) hasta comprensión inferencial (B+)</td>
             </tr>
             <tr style="background: var(--paper); font-weight: 800;">
@@ -2332,11 +2316,11 @@
                   <polygon points="235,86 320,131 320,83 235,38" fill="#10b981" id="front-poly-3" stroke="#059669" stroke-width="1" />
                   <!-- Tread 4 -->
                   <polygon points="235,38 320,83 375,53 290,8" fill="#34d399" id="top-poly-3" stroke="#059669" stroke-width="1" />
-                  <!-- Número 4 en el tread -->
-                  <text x="305" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-3">4</text>
-                  <!-- Conector hacia Callout 4 -->
-                  <line x1="375" y1="53" x2="415" y2="53" stroke="#10b981" stroke-width="2" stroke-dasharray="3,3"/>
-                  <circle cx="375" cy="53" r="4.5" fill="#10b981" />
+                  <!-- Número 4 en el centro del escalón -->
+                  <text x="295" y="54" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-3">4</text>
+                  <!-- Conector desde el centro del escalón (al lado del número) hacia Callout 4 -->
+                  <line x1="326" y1="45" x2="415" y2="45" stroke="#10b981" stroke-width="2" stroke-dasharray="3,3"/>
+                  <circle cx="326" cy="45" r="5" fill="#10b981" stroke="#ffffff" stroke-width="1.8" />
                 </g>
 
                 <!-- PASO 3 -->
@@ -2345,11 +2329,11 @@
                   <polygon points="180,164 265,209 265,161 180,116" fill="#eab308" id="front-poly-2" stroke="#ca8a04" stroke-width="1" />
                   <!-- Tread 3 -->
                   <polygon points="180,116 265,161 320,131 235,86" fill="#fde047" id="top-poly-2" stroke="#ca8a04" stroke-width="1" />
-                  <!-- Número 3 en el tread -->
-                  <text x="250" y="130" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-2">3</text>
-                  <!-- Conector hacia Callout 3 -->
-                  <line x1="320" y1="131" x2="415" y2="131" stroke="#eab308" stroke-width="2" stroke-dasharray="3,3"/>
-                  <circle cx="320" cy="131" r="4.5" fill="#eab308" />
+                  <!-- Número 3 en el centro del escalón -->
+                  <text x="240" y="132" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-2">3</text>
+                  <!-- Conector desde el centro del escalón (al lado del número) hacia Callout 3 -->
+                  <line x1="271" y1="123" x2="415" y2="123" stroke="#eab308" stroke-width="2" stroke-dasharray="3,3"/>
+                  <circle cx="271" cy="123" r="5" fill="#eab308" stroke="#ffffff" stroke-width="1.8" />
                 </g>
 
                 <!-- PASO 2 -->
@@ -2357,12 +2341,12 @@
                   <!-- Riser 2 -->
                   <polygon points="125,242 210,287 210,239 125,194" fill="#ea580c" id="front-poly-1" stroke="#c2410c" stroke-width="1" />
                   <!-- Tread 2 -->
-                  <polygon points="125,194 210,287 265,209 180,164" fill="#fb923c" id="top-poly-1" stroke="#c2410c" stroke-width="1" />
-                  <!-- Número 2 en el tread -->
-                  <text x="195" y="208" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-1">2</text>
-                  <!-- Conector hacia Callout 2 -->
-                  <line x1="265" y1="209" x2="415" y2="209" stroke="#ea580c" stroke-width="2" stroke-dasharray="3,3"/>
-                  <circle cx="265" cy="209" r="4.5" fill="#ea580c" />
+                  <polygon points="125,194 210,239 265,209 180,164" fill="#fb923c" id="top-poly-1" stroke="#c2410c" stroke-width="1" />
+                  <!-- Número 2 en el centro del escalón -->
+                  <text x="185" y="210" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-1">2</text>
+                  <!-- Conector desde el centro del escalón (al lado del número) hacia Callout 2 -->
+                  <line x1="216" y1="201" x2="415" y2="201" stroke="#ea580c" stroke-width="2" stroke-dasharray="3,3"/>
+                  <circle cx="216" cy="201" r="5" fill="#ea580c" stroke="#ffffff" stroke-width="1.8" />
                 </g>
 
                 <!-- PASO 1 (BASE INFERIOR) -->
@@ -2374,37 +2358,37 @@
                   <polygon points="70,320 155,365 155,317 70,272" fill="#e11d48" id="front-poly-0" stroke="#be123c" stroke-width="1" />
                   <!-- Tread 1 -->
                   <polygon points="70,272 155,317 210,287 125,242" fill="#fb7185" id="top-poly-0" stroke="#be123c" stroke-width="1" />
-                  <!-- Número 1 en el tread -->
-                  <text x="140" y="286" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-0">1</text>
-                  <!-- Conector hacia Callout 1 -->
-                  <line x1="210" y1="287" x2="415" y2="287" stroke="#e11d48" stroke-width="2" stroke-dasharray="3,3"/>
-                  <circle cx="210" cy="287" r="4.5" fill="#e11d48" />
+                  <!-- Número 1 en el centro del escalón -->
+                  <text x="130" y="288" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" id="svg-num-0">1</text>
+                  <!-- Conector desde el centro del escalón (al lado del número) hacia Callout 1 -->
+                  <line x1="161" y1="279" x2="415" y2="279" stroke="#e11d48" stroke-width="2" stroke-dasharray="3,3"/>
+                  <circle cx="161" cy="279" r="5" fill="#e11d48" stroke="#ffffff" stroke-width="1.8" />
                 </g>
 
-                <!-- CALLOUTS DE PUNTAJE (COLUMNA DERECHA PERFECTAMENTE ALINEADA Y ESPACIADA) -->
+                <!-- CALLOUTS DE PUNTAJE (COLUMNA DERECHA PERFECTAMENTE ALINEADA AL CENTRO DE CADA ESCALÓN) -->
                 <!-- Callout 4 -->
-                <g id="svg-callout-3" transform="translate(415, 38)">
+                <g id="svg-callout-3" transform="translate(415, 30)">
                   <rect x="0" y="0" width="125" height="30" rx="15" fill="#ffffff" stroke="#10b981" stroke-width="2" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.1))"/>
                   <circle cx="15" cy="15" r="5" fill="#10b981"/>
                   <text x="28" y="19" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#065f46" id="svg-callout-text-3">66 a 100 pts</text>
                 </g>
 
                 <!-- Callout 3 -->
-                <g id="svg-callout-2" transform="translate(415, 116)">
+                <g id="svg-callout-2" transform="translate(415, 108)">
                   <rect x="0" y="0" width="125" height="30" rx="15" fill="#ffffff" stroke="#eab308" stroke-width="2" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.1))"/>
                   <circle cx="15" cy="15" r="5" fill="#eab308"/>
                   <text x="28" y="19" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#854d0e" id="svg-callout-text-2">51 a 65 pts</text>
                 </g>
 
                 <!-- Callout 2 -->
-                <g id="svg-callout-1" transform="translate(415, 194)">
+                <g id="svg-callout-1" transform="translate(415, 186)">
                   <rect x="0" y="0" width="125" height="30" rx="15" fill="#ffffff" stroke="#ea580c" stroke-width="2" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.1))"/>
                   <circle cx="15" cy="15" r="5" fill="#ea580c"/>
                   <text x="28" y="19" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#9a3412" id="svg-callout-text-1">36 a 50 pts</text>
                 </g>
 
                 <!-- Callout 1 -->
-                <g id="svg-callout-0" transform="translate(415, 272)">
+                <g id="svg-callout-0" transform="translate(415, 264)">
                   <rect x="0" y="0" width="125" height="30" rx="15" fill="#ffffff" stroke="#e11d48" stroke-width="2" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.1))"/>
                   <circle cx="15" cy="15" r="5" fill="#e11d48"/>
                   <text x="28" y="19" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#9f1239" id="svg-callout-text-0">0 a 35 pts</text>
@@ -2990,7 +2974,6 @@
     };
 
 
-
     // ==========================================================================
     // BASE DE DATOS Y LÓGICA DE NIVELES DE DESEMPEÑO ICFES (ESCALERA 3D Y SIMULADOR)
     // ==========================================================================
@@ -2999,10 +2982,10 @@
         title: "📖 Prueba Lectura Crítica",
         isMcer: false,
         climberPositions: [
-          { x: 140, y: 255 }, // Step 1
-          { x: 195, y: 177 }, // Step 2
-          { x: 250, y: 99 },  // Step 3
-          { x: 305, y: 21 }   // Step 4
+          { x: 130, y: 255 }, // Step 1
+          { x: 185, y: 177 }, // Step 2
+          { x: 240, y: 99 },  // Step 3
+          { x: 295, y: 21 }   // Step 4
         ],
         levels: [
           {
@@ -3086,10 +3069,10 @@
         title: "📐 Prueba Matemáticas",
         isMcer: false,
         climberPositions: [
-          { x: 140, y: 255 }, // Step 1
-          { x: 195, y: 177 }, // Step 2
-          { x: 250, y: 99 },  // Step 3
-          { x: 305, y: 21 }   // Step 4
+          { x: 130, y: 255 }, // Step 1
+          { x: 185, y: 177 }, // Step 2
+          { x: 240, y: 99 },  // Step 3
+          { x: 295, y: 21 }   // Step 4
         ],
         levels: [
           {
@@ -3175,10 +3158,10 @@
         title: "🔬 Prueba Ciencias Naturales",
         isMcer: false,
         climberPositions: [
-          { x: 140, y: 255 }, // Step 1
-          { x: 195, y: 177 }, // Step 2
-          { x: 250, y: 99 },  // Step 3
-          { x: 305, y: 21 }   // Step 4
+          { x: 130, y: 255 }, // Step 1
+          { x: 185, y: 177 }, // Step 2
+          { x: 240, y: 99 },  // Step 3
+          { x: 295, y: 21 }   // Step 4
         ],
         levels: [
           {
@@ -3252,10 +3235,10 @@
         title: "🏛️ Prueba Sociales y Ciudadanas",
         isMcer: false,
         climberPositions: [
-          { x: 140, y: 255 }, // Step 1
-          { x: 195, y: 177 }, // Step 2
-          { x: 250, y: 99 },  // Step 3
-          { x: 305, y: 21 }   // Step 4
+          { x: 130, y: 255 }, // Step 1
+          { x: 185, y: 177 }, // Step 2
+          { x: 240, y: 99 },  // Step 3
+          { x: 295, y: 21 }   // Step 4
         ],
         levels: [
           {
@@ -3335,10 +3318,10 @@
         title: "🌐 Prueba Inglés (Alineación Marco Común Europeo MCER)",
         isMcer: true,
         climberPositions: [
-          { x: 140, y: 255 }, // Step 1
-          { x: 195, y: 177 }, // Step 2
-          { x: 250, y: 99 },  // Step 3
-          { x: 305, y: 21 }   // Step 4
+          { x: 130, y: 255 }, // Step 1
+          { x: 185, y: 177 }, // Step 2
+          { x: 240, y: 99 },  // Step 3
+          { x: 295, y: 21 }   // Step 4
         ],
         levels: [
           {
@@ -3450,9 +3433,9 @@
         if (svgNumEl) {
           svgNumEl.textContent = lvl.code;
           if (lvl.code.length > 2) {
-            svgNumEl.setAttribute('font-size', '20');
+            svgNumEl.setAttribute('font-size', '16');
           } else {
-            svgNumEl.setAttribute('font-size', '34');
+            svgNumEl.setAttribute('font-size', '28');
           }
         }
 
@@ -4175,6 +4158,8 @@
 
     // RENDER INICIAL
     document.addEventListener('DOMContentLoaded', () => {
+      // Activar vista fija en el Módulo 0 (Ruta Comercial)
+      jumpToModule(0);
       showAreaMatrix('mat');
       loadXRayExample(11);
       // Inicializar el flujo reactivo del generador de planes de choque
@@ -4182,85 +4167,35 @@
       onAreaChange();
     });
 
-    // CONTROL DE MODO PRESENTACIÓN vs DASHBOARD
-    function setMode(mode) {
-      currentMode = mode;
-      document.getElementById('btn-mode-dashboard').classList.toggle('active', mode === 'dashboard');
-      document.getElementById('btn-mode-presentation').classList.toggle('active', mode === 'presentation');
-      document.getElementById('pres-nav-controls').classList.toggle('show', mode === 'presentation');
-
-      const navBar = document.getElementById('module-nav-bar');
-
-      if (mode === 'presentation') {
-        navBar.style.display = 'none';
-        currentSlide = 0;
-        showSlide(currentSlide);
-      } else {
-        navBar.style.display = 'block';
-        for (let i = 0; i < totalSlides; i++) {
-          const mod = document.getElementById(`mod-${i}`);
-          if (mod) mod.style.display = 'flex';
-        }
-      }
-    }
-
-    function showSlide(index) {
-      if (index < 0) index = 0;
-      if (index >= totalSlides) index = totalSlides - 1;
-      currentSlide = index;
-
-      for (let i = 0; i < totalSlides; i++) {
-        const mod = document.getElementById(`mod-${i}`);
-        if (mod) {
-          mod.style.display = (i === currentSlide) ? 'flex' : 'none';
-        }
-      }
-
-      document.getElementById('pres-slide-num').textContent = `${currentSlide + 1} / ${totalSlides}`;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function nextSlide() {
-      if (currentMode === 'presentation' && currentSlide < totalSlides - 1) {
-        showSlide(currentSlide + 1);
-      }
-    }
-
-    function prevSlide() {
-      if (currentMode === 'presentation' && currentSlide > 0) {
-        showSlide(currentSlide - 1);
-      }
-    }
-
-    // NAVEGACIÓN POR TECLADO
-    document.addEventListener('keydown', (e) => {
-      if (currentMode === 'presentation') {
-        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-          e.preventDefault();
-          nextSlide();
-        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-          e.preventDefault();
-          prevSlide();
-        } else if (e.key === 'Escape') {
-          setMode('dashboard');
-        }
-      }
-    });
+    // NAVEGACIÓN FIJA EN EL MISMO LUGAR (SISTEMA DE MÓDULOS ACTIVOS - SIN SCROLL LARGO NI VENTANAS FLOTANTES)
+    let activeModuleIndex = 0;
+    const totalModules = 6;
 
     function jumpToModule(index) {
-      if (currentMode === 'presentation') {
-        showSlide(index);
-        return;
-      }
+      if (index < 0) index = 0;
+      if (index >= totalModules) index = totalModules - 1;
+      activeModuleIndex = index;
+
+      // Actualizar estado activo en botones de la barra de navegación
       document.querySelectorAll('.module-tab-btn').forEach((b, i) => {
-        b.classList.toggle('active', i === index);
+        b.classList.toggle('active', i === activeModuleIndex);
       });
-      const target = document.getElementById(`mod-${index}`);
-      if (target) {
-        const yOffset = -120;
-        const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
+
+      // Presentar únicamente el módulo seleccionado en el mismo contenedor
+      for (let i = 0; i < totalModules; i++) {
+        const mod = document.getElementById('mod-' + i);
+        if (mod) {
+          if (i === activeModuleIndex) {
+            mod.style.display = 'flex';
+            mod.style.animation = 'fadeInModule 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
+          } else {
+            mod.style.display = 'none';
+          }
+        }
       }
+
+      // Regresar al tope de la vista de forma limpia
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // GESTIÓN DE DIFICULTAD POR PRUEBA Y ÁREA
